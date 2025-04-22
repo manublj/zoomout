@@ -1,0 +1,1113 @@
+- TimelinePage specs (refined)
+    
+    **TimelinePage — File Location: `/pages/TimelinePage.js`**
+    
+    ### 1. **Primary Role**
+    
+    The **TimelinePage** plays a central role in Zoomout's UI, serving as the **primary interface for exploring chronological events** related to contradictions, struggles, and other key historical moments. The purpose of this page is to **organize, visualize, and analyze the unfolding of historical narratives**, showing how events map onto overarching structures and struggles.
+    
+    - **Event Chronology**: The TimelinePage is the tool for viewing events in a **linear progression**, allowing users to track the flow of contradictions over time.
+    - **Interactive Visualization**: It offers a clear, interactive view where users can **zoom in on specific events** or **pan through larger periods**, offering both high-level overviews and detailed views based on user preference.
+    - **Contextualizing Contradictions**: As users interact with the timeline, they will gain insight into how **contradictions** evolve, intensify, or even resolve over time. This allows them to see both **historical patterns** and the **nuanced tensions** within the framework of Zoomout's dialectical model.
+    - **Data Accessibility**: The timeline serves as a **data-centric interface**, making historical events and contradictions easily accessible. By clicking on or hovering over individual timeline events, users can access more granular details, like contradictions, issues, entities, or theories related to that specific moment.
+    
+    **Why this is important**:
+    
+    This section sets the overall purpose of the page. It establishes that the **TimelinePage is not just for viewing events** but is also a powerful tool for **interacting with and analyzing** historical data in a way that reflects Zoomout’s deeper commitment to contradiction mapping and historical tension.
+    
+    ### 2. **Sheets Used**
+    
+    The **TimelinePage** pulls data from several key sheets to generate the interactive timeline, and each sheet plays a distinct role in feeding the page with information. Here’s a breakdown of the sheets involved:
+    
+    1. **Timeline_Registry Sheet**:
+        - **Purpose**: This sheet holds the core data of all historical events organized by time and date. Each event is recorded with key metadata such as time, title, description, and identifiers for linked contradictions, struggles, and other entities.
+        - **Role on TimelinePage**: It forms the **backbone** of the timeline by providing the chronological data for every event that appears on the page.
+        - **Example Fields**: `Event Name`, `Date`, `Description`, `Contradictions Linked`, `Struggles Linked`, `Location`, `Key Players`.
+    2. **Contradictions Sheet**:
+        - **Purpose**: This sheet catalogs all contradictions — both ongoing and resolved. Each entry defines a particular social, economic, or political contradiction that drives historical tension.
+        - **Role on TimelinePage**: Each event on the timeline may be associated with one or more contradictions. This sheet helps provide the **context and historical weight** behind the events listed in the Timeline_Registry Sheet.
+        - **Example Fields**: `Contradiction Name`, `Description`, `Key Themes`, `Linked Events`, `Resolution Status`, `Duration`.
+    3. **Struggles Sheet**:
+        - **Purpose**: The Struggles Sheet contains data about the various struggles associated with contradictions, representing **collective action**, **resistance**, and **conflict** that shape historical outcomes.
+        - **Role on TimelinePage**: When an event occurs that is linked to a specific struggle, this sheet provides the **deeper narrative** of the struggle’s nature, impact, and key actors. It helps contextualize the event within the framework of **active social forces**.
+        - **Example Fields**: `Struggle Name`, `Linked Contradictions`, `Key Actors`, `Location`, `Start/End Dates`, `Impact`.
+    4. **Entities Sheet**:
+        - **Purpose**: This sheet lists all significant actors and organizations involved in the historical events cataloged in Zoomout. These entities may include individuals, political groups, organizations, or even ideologies.
+        - **Role on TimelinePage**: This sheet provides **personality and agency** to the events by linking specific entities to the timeline entries. It helps users understand **who is driving or resisting the contradictions** in the narrative.
+        - **Example Fields**: `Entity Name`, `Type (e.g., person, organization)`, `Linked Events`, `Key Roles`, `Region`, `Political Alignment`.
+    5. **Issues Sheet**:
+        - **Purpose**: The Issues Sheet defines the key societal issues, including legal, economic, and cultural conflicts, that arise throughout the timeline.
+        - **Role on TimelinePage**: This sheet provides a **thematic layer** to the events, struggles, and contradictions, showing how **specific societal issues** evolve and interact over time.
+        - **Example Fields**: `Issue Name`, `Description`, `Linked Events`, `Contradictions Linked`, `Resolution Status`.
+    
+    ### 3. **Data Relationships**
+    
+    The **TimelinePage** is an interconnected narrative where each event has relationships with various other entities, contradictions, struggles, and issues. These relationships define the **historical context** and **causal links** between different events, providing a deeper understanding of how history unfolds.
+    
+    Here’s a breakdown of the key data relationships for the TimelinePage:
+    
+    1. **Event to Contradictions**:
+        - **Relationship**: Each event is often the result of a contradiction or a manifestation of ongoing tensions. The event either resolves, perpetuates, or transforms the contradiction.
+        - **Example**: A major political protest might be the outcome of a **caste-based contradiction**.
+        - **Implementation**: The Timeline_Registry Sheet links to the **Contradictions Sheet** via a list of linked contradictions.
+    2. **Event to Struggles**:
+        - **Relationship**: Many historical events are the focal points of social struggles. These struggles may be either the **cause or consequence** of the event. In some cases, the event marks a **turning point** in the struggle itself.
+        - **Example**: A labor strike might lead to significant social unrest and be part of a larger economic struggle against an oppressive system.
+        - **Implementation**: The event entries in the Timeline_Registry Sheet link to the **Struggles Sheet** via struggle identifiers.
+    3. **Contradictions to Struggles**:
+        - **Relationship**: A contradiction often gives rise to a struggle. For instance, social, political, or economic inequalities fuel active resistance movements.
+        - **Example**: A contradiction such as **land dispossession** may lead to a struggle by **farmers and landless laborers** against state and corporate interests.
+        - **Implementation**: The **Contradictions Sheet** may include links to relevant struggles, showing how the contradiction is being contested or addressed.
+    4. **Event to Entities**:
+        - **Relationship**: Events are shaped by and, in turn, shape the actions and fates of various **entities** (individuals, groups, organizations, or ideologies). These entities may be **actors** in the event or impacted by it.
+        - **Example**: A specific **political party** may play a central role in the event, or an **individual leader** may have influenced the outcome.
+        - **Implementation**: Timeline_Registry Sheet links to **Entities Sheet**, showcasing the role of different actors in each event.
+    5. **Event to Issues**:
+        - **Relationship**: Events often highlight or exacerbate specific societal **issues** that need to be addressed. Conversely, issues that remain unresolved can often fuel or escalate events.
+        - **Example**: A major legal change can shed light on **constitutional issues** or **economic inequalities** that were previously ignored.
+        - **Implementation**: The event data includes links to relevant **Issues Sheets**, providing context for the challenges and debates surrounding each historical moment.
+    6. **Contradictions to Issues**:
+        - **Relationship**: A contradiction typically stems from one or more societal issues. For example, caste-based contradictions often link to issues of **land rights**, **education**, and **labor inequality**.
+        - **Example**: A contradiction between **oppressors** and **oppressed classes** might highlight issues like **labor exploitation**, **gender-based violence**, or **discriminatory laws**.
+        - **Implementation**: Contradictions are connected to Issues to show how contradictions manifest in real-world societal problems.
+    7. **Event Chronology (Parent → Update Events)**:
+        - **Relationship**: Events in the timeline may be part of a **larger historical process** and evolve over time. The **Parent → Update Events** relationship captures the notion that **events are updated** based on new information, changes in understanding, or shifts in historical analysis. This ensures that the timeline remains dynamic, reflecting how events may be re-contextualized as new insights emerge.
+        - **Example**: A key political event in the 1960s, such as a protest or a law, might have updates or new revelations about its impact decades later, reshaping how it is understood in the broader historical context.
+        - **Implementation**: Each event in the **Timeline_Registry Sheet** has a potential relationship to previous or parent events that shape it. As these relationships evolve or are re-contextualized, updates can be added, showing the progression of the historical narrative.
+    
+    ### 4. **Layout**
+    
+    The **Layout** section defines the structure of the **TimelinePage**, ensuring it is visually intuitive and functional, providing a seamless user experience. This layout should enable the user to easily navigate through events, explore related contradictions, struggles, and issues, and understand the underlying historical dynamics.
+    
+    ---
+    
+    ### **General Layout Structure**
+    
+    1. **Header Section**
+        - **Purpose**: The header serves as a navigation bar and a brief contextual introduction to the TimelinePage. It displays basic information about the time period or historical focus.
+        - **Key Elements**:
+            - **Title**: Displays the **name of the timeline** or **specific historical theme** (e.g., "Caste Dynamics in Tamil Nadu").
+            - **Period Selector**: Allows users to filter events by specific periods or eras (e.g., 1900-1950, post-independence).
+            - **Search Bar**: A universal search bar to allow users to search for specific events, contradictions, struggles, or entities directly from the page.
+            - **Breadcrumb Navigation**: For easier navigation, especially when the timeline is part of a broader framework, users can track their path (e.g., Home → Caste Dynamics → 1960-1980).
+    2. **Main Timeline Section**
+        - **Purpose**: This is the core section of the page, where the events are displayed in chronological order. It is visually rich, and interactive, and offers an overview of the events.
+        - **Key Elements**:
+            - **Timeline View**: Events displayed on a horizontal or vertical timeline.
+                - Each event can be clicked for more details.
+                - **Event Markers**: Key historical markers representing specific events, struggles, or contradictions.
+            - **Hover Interaction**: When hovering over an event marker, a **quick preview** shows the event’s title, date, and main contradiction or struggle.
+            - **Zoom-In/Out**: A zoom feature to adjust the level of detail on the timeline. Users can zoom in for granular years or zoom out to view broader historical periods.
+    3. **Event Detail Section (Sidebar or Popup)**
+        - **Purpose**: When a user clicks on an event marker, the event’s details appear in this section. It provides in-depth information and links to other related content.
+        - **Key Elements**:
+            - **Event Overview**: Includes a short summary or abstract of the event.
+            - **Detailed Information**: A deeper dive into the event’s context, causes, and consequences.
+            - **Linked Entities**: Lists key people, groups, or organizations involved in the event. Clicking on an entity takes the user to that entity’s page.
+            - **Contradictions & Struggles**: A section dedicated to the related contradictions and struggles connected to this event. Each can be clicked for more details.
+            - **Issues**: Lists the societal issues that the event impacted or highlighted.
+            - **Event Update Chronology**: If the event has been updated or contextualized through later research or political shifts, users can view these revisions with an easy-to-understand comparison.
+    4. **Contradictions and Struggles Panels**
+        - **Purpose**: Provides a more focused exploration of contradictions and struggles connected to the events.
+        - **Key Elements**:
+            - **Contradictions Panel**: A panel or expandable list that shows the **key contradictions** highlighted by the event. It can show if the contradiction was deepened, resolved, or transformed.
+            - **Struggles Panel**: A similar panel focusing on **struggles**, showing related movements, actions, or social resistance linked to the event.
+    5. **Interactive Filters & Sorting**
+        - **Purpose**: Provides users the ability to sort and filter the timeline by various criteria. This section should be prominent but not overwhelming.
+        - **Key Elements**:
+            - **Filters**:
+                - **Event Type** (e.g., Protests, Legal Decisions, Strikes, Reforms)
+                - **Contradiction Type** (e.g., Caste, Class, Gender)
+                - **Location** (region or state, e.g., Tamil Nadu, All-India, etc.)
+            - **Sort Options**:
+                - By **Date** (Ascending or Descending)
+                - By **Impact** (most influential events first, if defined in metadata)
+    6. **Footer Section**
+        - **Purpose**: Contains metadata and supplementary information about the timeline and its creation.
+        - **Key Elements**:
+            - **Timeline Sources**: Links to sources, data origins, or references that back the events presented on the page.
+            - **About Zoomout**: Brief about the platform and its purpose, including a link to more detailed explanations (like **Zoomout’s Commitment** and **Political Commitments**).
+            - **Copyright Information**: Attributions and rights related to the content on the page.
+    
+    ---
+    
+    ### **Visual Hierarchy & Design Considerations**
+    
+    - **Color Scheme**: A consistent color palette should be used for event markers, contradictions, struggles, and issues to help visually distinguish between different types of events and relationships.
+    - **Typography**: Clear, readable fonts with defined hierarchies (e.g., event titles bold, summaries in regular weight).
+    - **Interactive Elements**: Buttons, dropdowns, and hover states should have intuitive visual cues, including highlighting of clickable elements when hovered over.
+    - **Responsive Design**: The layout should adjust for different screen sizes, ensuring that users can easily view and interact with the timeline on mobile devices, tablets, and desktops.
+    
+    ### 5. **Component Breakdown**
+    
+    The **Component Breakdown** section provides a detailed look at the different elements that make up the **TimelinePage**, ensuring that each component serves a specific purpose and is implemented consistently. It outlines all individual UI elements, their interactions, and the role they play in facilitating a user’s navigation through the page.
+    
+    ---
+    
+    ### **(a). Header Components**
+    
+    1. **Title**
+        - **Purpose**: Display the name of the timeline or historical theme (e.g., "Caste Dynamics in Tamil Nadu").
+        - **Type**: Text component with dynamic content (editable).
+        - **Interactions**: Clicking on the title should direct users to the landing page or main overview of that timeline.
+    2. **Period Selector**
+        - **Purpose**: Allows users to filter the timeline by specific periods or historical phases.
+        - **Type**: Dropdown or date range slider.
+        - **Interactions**: When a period is selected, the timeline updates to show only events within that range.
+    3. **Search Bar**
+        - **Purpose**: Allows users to search for specific events, contradictions, struggles, or entities by name.
+        - **Type**: Text input with auto-suggestions.
+        - **Interactions**: Typing will provide real-time search results. Clicking a result will navigate the user to the relevant event or entity detail.
+    4. **Breadcrumb Navigation**
+        - **Purpose**: Provides a clear path of the user’s current page in relation to the overall platform structure.
+        - **Type**: Horizontal navigation list (e.g., Home → Caste Dynamics → 1960-1980).
+        - **Interactions**: Clicking on any breadcrumb item should take the user to that section or category.
+    
+    ---
+    
+    ### **(b). Main Timeline Components**
+    
+    1. **Timeline View**
+        - **Purpose**: The main timeline visualization where historical events are displayed in chronological order.
+        - **Type**: Horizontal or vertical timeline using visual markers.
+        - **Interactions**: Events are clickable, and users can zoom in or out to adjust the level of detail.
+    2. **Event Marker**
+        - **Purpose**: Represents an individual event, struggle, contradiction, or turning point.
+        - **Type**: Circular or rectangular visual marker.
+        - **Interactions**: Hovering over or clicking an event marker will display quick information or open the event details in a sidebar or popup.
+    3. **Hover Preview**
+        - **Purpose**: Provides a brief snapshot of the event when users hover over the event marker.
+        - **Type**: Tooltip or popup.
+        - **Interactions**: Hovering over the event marker triggers the display of the event title, date, and a snippet of the contradiction/struggle linked to the event.
+    4. **Zoom-In/Out Controls**
+        - **Purpose**: Allows the user to adjust the level of granularity in the timeline.
+        - **Type**: Slider or plus/minus buttons.
+        - **Interactions**: Adjusting the zoom level will either condense the timeline to show broad historical periods or zoom in to show specific events in greater detail.
+    
+    ---
+    
+    ### **(c). Event Detail Section Components**
+    
+    1. **Event Overview**
+        - **Purpose**: Provides a short summary or abstract of the event.
+        - **Type**: Text block with dynamic content.
+        - **Interactions**: None; just a static display of the event description.
+    2. **Detailed Information**
+        - **Purpose**: Displays an in-depth narrative about the event, its causes, context, and consequences.
+        - **Type**: Expandable text box or panel.
+        - **Interactions**: Clicking on "More Info" or a similar action expands the section for further details.
+    3. **Linked Entities**
+        - **Purpose**: Lists entities (people, organizations, groups) involved in the event.
+        - **Type**: List of clickable links or icons representing entities.
+        - **Interactions**: Clicking on any entity will navigate to that entity’s detailed page.
+    4. **Contradictions & Struggles**
+        - **Purpose**: Lists the contradictions and struggles that are part of the event.
+        - **Type**: Scrollable list or collapsible panel.
+        - **Interactions**: Clicking on a contradiction or struggle will lead to further exploration on that topic.
+    5. **Event Update Chronology**
+        - **Purpose**: Displays a history of any revisions or updates made to the event’s understanding over time.
+        - **Type**: Timeline or collapsible list.
+        - **Interactions**: Clicking on an update reveals the new information and comparison with the original event details.
+    
+    ---
+    
+    ### **(d). Contradictions and Struggles Panel Components**
+    
+    1. **Contradictions Panel**
+        - **Purpose**: Showcases key contradictions highlighted by the event.
+        - **Type**: A grid or list of contradiction titles.
+        - **Interactions**: Clicking on a contradiction leads to a detailed page on that contradiction.
+    2. **Struggles Panel**
+        - **Purpose**: Displays linked social, political, or economic struggles tied to the event.
+        - **Type**: A grid or list of struggle titles.
+        - **Interactions**: Clicking on a struggle links to more detailed information.
+    
+    ---
+    
+    ### **(e). Filters & Sorting Components**
+    
+    1. **Filter Options**
+        - **Purpose**: Enables users to filter events based on categories such as event type, contradiction type, or location.
+        - **Type**: Dropdowns or multi-select checkboxes.
+        - **Interactions**: When selected, filters will immediately refresh the timeline to show only relevant events.
+    2. **Sort Options**
+        - **Purpose**: Allows users to sort the events in the timeline by date, impact, or other criteria.
+        - **Type**: Dropdown or toggle switches.
+        - **Interactions**: Sorting changes the order of the events presented on the timeline.
+    
+    ---
+    
+    ### **(f). Footer Components**
+    
+    1. **Timeline Sources**
+        - **Purpose**: Lists the sources, references, or archives used to compile the timeline’s events.
+        - **Type**: Text links or citation-style list.
+        - **Interactions**: Clicking on a source link opens a new tab or modal with detailed source information.
+    2. **About Zoomout**
+        - **Purpose**: A brief explanation of what Zoomout is and its political and historical commitments.
+        - **Type**: Text block or expandable panel.
+        - **Interactions**: Clicking on the "About Zoomout" link opens a detailed page with more information.
+    3. **Copyright & Legal Information**
+        - **Purpose**: Displays legal disclaimers, copyright, and attribution information for the content on the page.
+        - **Type**: Static text.
+        - **Interactions**: None.
+    
+    ---
+    
+    ### 7. **Component Behavior**
+    
+    The **Component Behavior** section describes the intended behavior of each component under various user interactions. This ensures that each element on the **TimelinePage** is intuitive and works cohesively with other elements. Here, we cover how each component should respond to clicks, hovers, changes, or other user-driven actions.
+    
+    ---
+    
+    ### **1. Header Components**
+    
+    1. **Title**
+        - **Behavior**:
+            - When clicked, the title navigates to the main timeline or home page.
+            - If the user is on the home page, the title remains static, without an interaction.
+            - If the title is editable, clicking will activate an inline editor for renaming the timeline.
+    2. **Period Selector**
+        - **Behavior**:
+            - Clicking the dropdown opens a list of available periods or ranges, allowing the user to select one.
+            - The timeline updates immediately after a selection is made, showing only events that occurred within the selected range.
+            - The dropdown automatically closes once a selection is made or when the user clicks outside of it.
+    3. **Search Bar**
+        - **Behavior**:
+            - As the user types, real-time suggestions are displayed below the search input.
+            - Clicking a suggestion directs the user to the relevant event or entity detail page.
+            - If the search query does not match any result, a "No results found" message will appear.
+    4. **Breadcrumb Navigation**
+        - **Behavior**:
+            - Each breadcrumb is clickable, and clicking on any breadcrumb will navigate to the corresponding page.
+            - The breadcrumb trail should update as the user navigates deeper into the timeline.
+    
+    ---
+    
+    ### **2. Main Timeline Components**
+    
+    1. **Timeline View**
+        - **Behavior**:
+            - The timeline is scrollable horizontally or vertically based on the selected layout.
+            - As the user scrolls or zooms in/out, the timeline adjusts dynamically to show more or fewer events.
+            - Event markers are displayed with varying sizes or distances depending on the zoom level.
+    2. **Event Marker**
+        - **Behavior**:
+            - Hovering over an event marker displays a tooltip with a quick preview of the event (e.g., name, date, brief description).
+            - Clicking the event marker opens the event detail panel, revealing more information about the event.
+            - When zoomed in, the markers may have additional visual cues like color coding or icons to indicate their importance or type.
+    3. **Hover Preview**
+        - **Behavior**:
+            - Hovering over an event marker triggers a tooltip or preview box that temporarily shows event details.
+            - The tooltip should be dismissible by clicking anywhere outside of it.
+            - If an event has multiple linked contradictions or struggles, those should be briefly shown within the preview box.
+    4. **Zoom-In/Out Controls**
+        - **Behavior**:
+            - Clicking on the zoom-in (+) button increases the granularity of the timeline, showing more events in greater detail.
+            - Clicking the zoom-out (-) button condenses the timeline, displaying fewer events over a broader span of time.
+            - A zoom reset button restores the timeline to the default view.
+    
+    ---
+    
+    ### **3. Event Detail Section Components**
+    
+    1. **Event Overview**
+        - **Behavior**:
+            - This section displays a short summary of the event that is static and doesn’t change based on user actions.
+            - If this section contains a link to an external resource or reference, clicking will open the linked page.
+    2. **Detailed Information**
+        - **Behavior**:
+            - By default, this section is collapsed. Clicking on "More Info" or the expand icon opens the full details of the event.
+            - If the user scrolls within this section, the rest of the page (timeline and other details) should remain static, allowing for a smooth reading experience.
+    3. **Linked Entities**
+        - **Behavior**:
+            - Clicking on any entity listed here opens that entity’s detailed page, where users can learn more about their role in the event.
+            - Each entity name should be clickable and link directly to their respective page.
+    4. **Contradictions & Struggles**
+        - **Behavior**:
+            - Clicking on a contradiction or struggle will open a new panel or modal that provides more detailed information about it.
+            - Users should also be able to "Close" the detailed panel and return to the event page.
+    5. **Event Update Chronology**
+        - **Behavior**:
+            - Clicking on any update entry reveals a detailed description of the update, comparing it with the original event data.
+            - The user can toggle between different versions of the event if the updates are numerous, allowing for a more in-depth review of how the event details have evolved over time.
+    
+    ---
+    
+    ### **4. Contradictions and Struggles Panel Components**
+    
+    1. **Contradictions Panel**
+        - **Behavior**:
+            - Each contradiction is clickable, and clicking redirects the user to a more detailed page with full context about the contradiction.
+            - If there is no further information, a "No further data available" message should appear.
+    2. **Struggles Panel**
+        - **Behavior**:
+            - Similar to the contradictions panel, struggles are clickable, and a click leads to more detailed information about that specific struggle.
+            - Struggles should be displayed in chronological order, with the most significant ones highlighted.
+    
+    ---
+    
+    ### **5. Filters & Sorting Components**
+    
+    1. **Filter Options**
+        - **Behavior**:
+            - Selecting a filter option immediately updates the timeline, hiding events that don’t match the selected criteria.
+            - Filters should work dynamically, allowing multiple criteria to be selected simultaneously (e.g., filtering by event type, location, or period).
+            - The user should be able to clear any filter with a "Clear Filter" option.
+    2. **Sort Options**
+        - **Behavior**:
+            - Changing the sorting order updates the events listed on the timeline.
+            - Sorting should work in ascending and descending orders based on the chosen criteria (e.g., date, impact level).
+    
+    ---
+    
+    ### **6. Footer Components**
+    
+    1. **Timeline Sources**
+        - **Behavior**:
+            - Clicking on any source link opens a new page or modal with more detailed information about the referenced source.
+            - If a source is external, it should open in a new tab to preserve the user’s context.
+    2. **About Zoomout**
+        - **Behavior**:
+            - Clicking on the "About Zoomout" link opens a detailed page or modal that explains the mission and vision behind Zoomout.
+            - This page should include a call to action for users to learn more or get involved with the platform.
+    3. **Copyright & Legal Information**
+        - **Behavior**:
+            - This section is static, providing legal disclaimers and copyright information. It doesn’t change or interact with user input.
+            - Clicking on any legal links should open them in a new tab or modal to preserve the user’s navigation.
+    
+    ### 8. **Interaction Flows**
+    
+    The **Interaction Flows** section outlines the logical sequence of user actions within the TimelinePage, ensuring that users have a smooth, intuitive experience while navigating the page. This section clarifies the expected path the user takes to interact with different elements, helping to define behavior in terms of process, accessibility, and user expectations.
+    
+    ---
+    
+    ### **1. Timeline View Interaction Flow**
+    
+    1. **Initial State**:
+        - When the page first loads, the timeline is displayed with the default zoom level and the earliest period selected (if applicable).
+        - Events and other markers should be shown in a condensed form, with a limited amount of information visible for each event.
+    2. **Zooming In/Out**:
+        - When the user zooms in (via the zoom-in button or scroll), the timeline expands, showing more granular events within a smaller time window.
+        - If the user zooms out, the timeline condenses, and fewer events are shown over a broader time span.
+        - This interaction flow ensures that the user can control the level of detail they want to see at any given time.
+    3. **Event Marker Click**:
+        - Clicking on an event marker opens a sidebar or overlay with more detailed information about the selected event.
+        - The user can scroll through the event details, and the timeline remains in place for context.
+        - If the event is linked to contradictions or struggles, these are displayed as clickable items within the event details.
+    4. **Event Hover**:
+        - Hovering over an event marker displays a tooltip or preview box that shows a summary of the event.
+        - The tooltip will automatically disappear when the user moves the cursor away.
+    
+    ---
+    
+    ### **2. Event Detail Interaction Flow**
+    
+    1. **Expand Event Details**:
+        - Clicking "More Info" or the expand icon within the event details section will reveal a deeper, more comprehensive view of the event.
+        - This includes historical context, linked contradictions, related struggles, and any changes or updates made to the event over time.
+    2. **Return to Timeline**:
+        - After reviewing event details, the user can click a "Close" or "Back to Timeline" button to return to the main timeline view.
+        - The timeline view remains intact, and any zoom levels or selected periods are preserved.
+    3. **Linked Contradictions & Struggles**:
+        - Clicking on a contradiction or struggle within the event details will open a new panel or modal, displaying detailed information about the selected issue.
+        - From here, users can either explore linked entities, view additional struggles, or return to the event details.
+    
+    ---
+    
+    ### **3. Filtering & Sorting Interaction Flow**
+    
+    1. **Select Filter Options**:
+        - Clicking on any filter option (e.g., event type, date range, region) triggers an immediate update of the timeline.
+        - The timeline dynamically adjusts, hiding or showing events that match the selected criteria.
+    2. **Clear Filter**:
+        - Clicking "Clear Filter" resets all active filters and returns the timeline to its default state, displaying all available events.
+        - The user is not required to reload the page—filters are reset in real time.
+    3. **Sort Events**:
+        - Selecting a sort option (e.g., sort by date or relevance) immediately reorders the events within the timeline.
+        - Sorting is done dynamically, with no page reload required, ensuring smooth interaction.
+    
+    ---
+    
+    ### **4. Event Update Chronology Interaction Flow**
+    
+    1. **View Event Updates**:
+        - Users can click on an event’s update entry to compare the initial version with subsequent updates.
+        - The event’s detailed view switches to a version comparison mode, highlighting changes in event details over time.
+    2. **Toggle Between Versions**:
+        - Users can toggle between different versions of an event using "Previous" and "Next" buttons, which display the event content at various points in its history.
+        - If the user switches to an earlier version, the changes from that version are highlighted for easy comparison.
+    
+    ---
+    
+    ### **5. Breadcrumb Navigation Interaction Flow**
+    
+    1. **Navigate Through Breadcrumbs**:
+        - Clicking on any breadcrumb takes the user back to the corresponding page (e.g., going from the event details back to the timeline or to another section like the contradictions or struggles page).
+        - Breadcrumbs should provide clear visual indicators of the user's location within the site, showing where they are relative to other sections.
+    2. **Visual Update on Navigation**:
+        - As the user navigates via breadcrumbs, the timeline view or event details update accordingly to reflect the selected breadcrumb’s content.
+    
+    ---
+    
+    ### **6. Search Bar Interaction Flow**
+    
+    1. **Search for Events or Entities**:
+        - As the user types into the search bar, results begin appearing in real time. The user can select any of the suggested items to jump directly to that event, entity, or contradiction.
+        - If no results match, a message will appear below the search bar notifying the user that no results were found.
+    2. **Clear Search**:
+        - Clicking on the search bar again or the "Clear" button will reset the search and show the full timeline with no search filter applied.
+        - The user can start a new search or return to the default view.
+    
+    ---
+    
+    ### **7. Timeline Sources Interaction Flow**
+    
+    1. **View Source Details**:
+        - Clicking on any source link within the timeline’s footer or event details opens a new page or modal with more details about the source.
+        - If the source is external, it should open in a new tab to preserve the user's context within the timeline.
+    
+    ### 9. **Key UI Behavior**
+    
+    The **Key UI Behavior** section focuses on how the user interface elements on the **TimelinePage** behave in response to interactions, ensuring a smooth, engaging, and accessible experience for users. This section addresses visual states, transitions, and responsiveness across different devices.
+    
+    ---
+    
+    ### **1. Event Marker Behavior**
+    
+    1. **Hover State**:
+        - Event markers will change visually (e.g., color shift or size enlargement) when the user hovers over them. This provides an immediate indication that the marker is interactive.
+        - A tooltip or quick preview of the event’s content (e.g., event name, brief description) will appear upon hover.
+    2. **Active State**:
+        - Once an event marker is clicked, it should highlight with a distinctive color or animation to show it is selected.
+        - The event marker will remain in this active state until the user clicks on another event or resets their selection.
+    3. **Event Clustering**:
+        - As the user zooms in, event markers will spread out to reveal more detailed information. When zoomed out, markers may cluster or condense into a simpler form, grouping related events together.
+        - This behavior ensures the timeline stays readable and uncluttered at all zoom levels.
+    
+    ---
+    
+    ### **2. Timeline Zooming Behavior**
+    
+    1. **Zoom In/Out**:
+        - When zooming in, the timeline expands to show more granular event details, and event markers become more visible, potentially splitting into sub-events or more detailed breakdowns.
+        - When zooming out, the timeline condenses, grouping events into broader time intervals.
+        - Visual transitions between zoom states should be smooth, with animations that help the user visually understand the shift in scale.
+    2. **Reset Zoom**:
+        - A reset zoom button or double-click on the timeline background will return the timeline to its default view (e.g., a specific date range or the earliest events).
+        - Reset zoom should feel responsive and immediate without page reloads.
+    
+    ---
+    
+    ### **3. Event Detail Panel Behavior**
+    
+    1. **Expand/Collapse Details**:
+        - Clicking on an event marker or event in the timeline should open an event detail panel (in a sidebar or modal) where additional information is displayed.
+        - The event details panel should slide in smoothly from the right or appear from the bottom of the screen to avoid abrupt transitions.
+        - The user can collapse the event detail panel by clicking a “Close” button or clicking outside the panel.
+    2. **Detail Panel Position**:
+        - The event detail panel should be sticky within the viewport, ensuring that as the user scrolls the timeline, the panel stays in place to provide context.
+        - When scrolling through detailed content, the panel should update dynamically to display the relevant information about the currently selected event.
+    
+    ---
+    
+    ### **4. Filter Menu Behavior**
+    
+    1. **Filter Toggle**:
+        - The filter menu should be initially hidden and can be toggled open with a button or swipe gesture. When expanded, it should slide in from the left or bottom.
+        - Filters should be easy to interact with, with sliders, checkboxes, and date pickers appearing as necessary.
+        - When the user interacts with a filter, the timeline should update dynamically to reflect the changes in filtering without page reloads.
+    2. **Active Filters Indicator**:
+        - Active filters should be visually highlighted in the filter menu (e.g., with a check mark or a highlighted box).
+        - If the user clears a filter, the interface should immediately reflect the removal and show the unfiltered view.
+    
+    ---
+    
+    ### **5. Event Update Chronology Behavior**
+    
+    1. **Show Version Comparison**:
+        - When the user clicks on the version comparison button for an event, the timeline view should update to show the event in two versions: the original and the updated one.
+        - The two versions should be visually distinct, perhaps using a side-by-side comparison or split screen, with changes highlighted (e.g., color-coded text changes).
+    2. **Toggle Between Versions**:
+        - The "Previous" and "Next" buttons allow the user to toggle through different versions of the event.
+        - As the user toggles, the event details and timeline should update smoothly, ensuring that the content transitions fluidly between versions.
+    
+    ---
+    
+    ### **6. Navigation Behavior**
+    
+    1. **Breadcrumb Navigation**:
+        - As the user navigates through different sections of the timeline or event details, breadcrumbs should update dynamically, showing the user's path.
+        - Clicking on any breadcrumb should immediately navigate to that part of the site, with a smooth transition to the relevant page or timeline section.
+    2. **Back Button**:
+        - If the user clicks the browser’s back button, the site should return to the previously viewed state (e.g., the previous zoom level, the last event viewed).
+        - This should feel seamless, maintaining the user’s context without resetting the page view.
+    
+    ---
+    
+    ### **7. Responsiveness Behavior**
+    
+    1. **Mobile View**:
+        - On mobile, the timeline should adapt to smaller screens by condensing certain elements (e.g., collapsing the filter menu into a hamburger menu, reducing the size of event markers).
+        - The event detail panel should open as a full-screen overlay on mobile, providing ample space for users to interact with event content.
+    2. **Tablet View**:
+        - On tablet devices, the layout should be flexible enough to use the same horizontal timeline structure but should ensure the event markers and text are legible without overcrowding.
+        - Event details should appear in a modal or slide-in panel that covers a portion of the screen, allowing users to navigate through events without interrupting the timeline.
+    
+    ---
+    
+    ### **8. Animation and Transition Behavior**
+    
+    1. **Event Detail Panel Animation**:
+        - Opening or closing event detail panels should be animated to appear smoothly, enhancing the user experience. The animation can be a simple slide-in from the side or a fade-in effect.
+    2. **Zoom Animations**:
+        - Zooming in and out on the timeline should be accompanied by smooth transitions to avoid abrupt changes that might disorient the user. The zoom should feel like a fluid interaction rather than a sudden jump in scale.
+    
+    ### 10. **Visual Design Guidelines**
+    
+    The **Visual Design Guidelines** section specifies the aesthetic principles and design elements that will be used across the **TimelinePage** to ensure visual coherence, clarity, and alignment with the overarching brand identity. This section covers the color scheme, typography, iconography, spacing, and general layout considerations.
+    
+    ---
+    
+    ### **1. Color Scheme**
+    
+    1. **Primary Colors**:
+        - The timeline should use a primary color palette that reinforces the seriousness and historical depth of the product. Use darker tones for background and timeline elements to maintain readability and focus.
+        - Highlighted elements (e.g., active events, event markers) should use an accent color (e.g., a contrasting bright color like deep red or cyan) to draw attention without overpowering the design.
+    2. **Background**:
+        - The timeline background should be subtle, using dark or muted colors (e.g., deep grays, dark blues) to allow events and markers to stand out. The primary background color for the page should provide enough contrast to ensure readability of white or light-colored text.
+    3. **Event Marker Colors**:
+        - Event markers should be color-coded based on the type of event, with a clear visual distinction for each type (e.g., social event, political event, cultural shift). Each event type can be assigned a different color or shade to help users quickly identify the nature of the event at a glance.
+        - Selected or active event markers should have an accent color to highlight their significance.
+    4. **Hover/Active States**:
+        - Use consistent color shifts to indicate hover and active states, such as lighter shades for hover and darker, bold shades for active states, ensuring these states are distinguishable from the default state of the markers.
+    
+    ---
+    
+    ### **2. Typography**
+    
+    1. **Primary Typeface**:
+        - The font for the body text should be clean, readable, and professional (e.g., a sans-serif font like "Roboto" or "Open Sans"). The font weight should range from regular to medium to keep text readable without overwhelming the user.
+    2. **Headers and Titles**:
+        - Headers should use a bolder weight, and a slightly larger font size to distinguish them from body text (e.g., a serif font like "Merriweather" for added historical gravitas). The hierarchy should be clear, with titles at the top, followed by section headers and subheaders.
+    3. **Event Titles and Descriptions**:
+        - Event titles should be clearly differentiated from event descriptions using a larger font size and bold weight. Descriptions should be in a smaller font size and lighter weight to emphasize the hierarchy of information.
+    4. **Text Alignment**:
+        - Text should primarily be left-aligned for readability, with clear line spacing to improve the overall flow of reading.
+        - Event markers and titles should be centered along the timeline axis to maintain balance while still prioritizing legibility.
+    
+    ---
+    
+    ### **3. Iconography**
+    
+    1. **Icons for Event Types**:
+        - Icons should accompany event titles, representing the type or nature of the event. Use simple, universally recognized icons (e.g., a gavel for legal events, a flag for political events) to visually categorize events without overwhelming the page with text.
+    2. **Interactive Elements**:
+        - Use icons for interactive elements like filters, zoom buttons, and navigation arrows. These should be simple and clear, using a minimalistic design style. Icons should change when hovered or clicked, such as by changing color or size.
+    3. **Event Marker Shapes**:
+        - Event markers can use different shapes to represent different event types (e.g., circles for cultural events, diamonds for political events). This further categorizes the content visually.
+    
+    ---
+    
+    ### **4. Spacing and Layout**
+    
+    1. **Whitespace**:
+        - Generous use of whitespace will ensure that the page doesn’t feel crowded. Adequate spacing between the timeline elements, text, and event markers will improve readability and ease of navigation.
+        - Padding around text blocks, event markers, and interactive elements will help to avoid a cluttered look and allow the content to breathe.
+    2. **Timeline Axis Spacing**:
+        - The horizontal spacing between events should dynamically adjust based on the zoom level, ensuring that events are not too crowded or too spread out. The timeline axis itself should have clear visual demarcations (e.g., year markers or decade markers) to guide the user.
+    3. **Event Details Panel Layout**:
+        - When the event detail panel is expanded, the layout should follow a clear, hierarchical structure. The event title should be at the top, followed by key details such as date, event type, description, and related entities.
+        - The panel should avoid unnecessary clutter, displaying only essential information and links to related events or entities.
+    
+    ---
+    
+    ### **5. Responsive Design**
+    
+    1. **Mobile Design**:
+        - On mobile devices, the timeline should condense its layout to fit smaller screens while maintaining legibility. For example, event markers may overlap in a stacked vertical view or be spaced closer together.
+        - The event details panel should be full-screen or bottom-sheet style to maximize space for content.
+    2. **Tablet Design**:
+        - On tablets, the design should balance between desktop and mobile layouts. Event markers should be larger than on mobile but still optimized for touch interaction. The event details panel should be adjustable in size and not block the entire screen.
+    3. **Breakpoints**:
+        - Design should account for different breakpoints, ensuring the page is usable and visually appealing on devices of varying screen sizes (from desktops to tablets to mobile phones).
+    
+    ---
+    
+    ### **6. Visual Hierarchy**
+    
+    1. **Primary Elements**:
+        - The most important elements, such as event markers, the timeline axis, and key actions (e.g., zoom, navigation), should stand out visually through size, color, and contrast. These elements should immediately draw the user’s attention without overwhelming the page.
+    2. **Secondary Elements**:
+        - Secondary elements like event descriptions, filters, and navigation buttons should be slightly more subdued but still easily accessible.
+    3. **Tertiary Elements**:
+        - Any additional details or less critical information should be presented in a way that does not interfere with the primary narrative of the timeline. This can be achieved through subtle styling, such as smaller text or less pronounced iconography.
+    
+    ### 11. **Empty States**
+    
+    The **Empty States** section outlines the design approach and messaging when no content is available on the **TimelinePage**. Empty states are important because they guide users, maintaining clarity and reducing frustration when the page doesn't yet have any data to display. This section specifies what the user will see and how it will behave under different conditions where the timeline may not yet be populated or no events are filtered in.
+    
+    ---
+    
+    ### **1. General Empty State Design**
+    
+    1. **Visual Representation**:
+        - When there is no data to display, the timeline should not show a blank screen. Instead, there should be an empty or neutral background with a simple, contextual illustration or icon that suggests the user is in an empty state. For example, an empty timeline could show a subtle background pattern (such as faint historical textures or a grid) that hints at a potential for future data input.
+    2. **Message to Users**:
+        - The empty state should include a clear, friendly message explaining why no data is available, such as:
+            - "No events to display for this time period."
+            - "Your timeline is empty — start adding events to bring history to life."
+        - The tone should be informative, inviting the user to engage with the product and add content or use filters.
+    3. **Call to Action (CTA)**:
+        - Include a prominent, actionable suggestion such as:
+            - "Add your first event" or "Browse historical events to add."
+            - A button or link to guide the user towards adding data or searching for events (e.g., "Start Creating").
+        - If the empty state is due to a filter or search being applied, the CTA could suggest clearing the filter: "No results found — clear filters to see more."
+    
+    ---
+    
+    ### **2. Context-Specific Empty States**
+    
+    1. **Empty Timeline**:
+        - When the timeline itself is empty (i.e., no events have been added yet), the message should emphasize that the user has the opportunity to start adding historical data. This can be paired with a tutorial or guided walk-through option that helps the user understand how to add events.
+        - Example message: “This timeline is waiting to be filled with historical moments. Start by adding events and create a narrative.”
+    2. **Empty Event Filter**:
+        - If the user applies a filter (e.g., by event type, date, region) and no events match, the empty state should clearly explain that the filter resulted in no matches.
+        - Example message: "No events match your filter. Try clearing some options or adjusting your criteria."
+        - Include an option to clear or reset the filter, allowing the user to quickly navigate back to the full timeline view.
+    3. **Empty Event Detail View**:
+        - If the user selects an event but no detailed information has been added (e.g., no description, images, or related events), the empty state should encourage the user to fill in more details for that event.
+        - Example message: “This event is still a blank slate. Add details to enrich the story.”
+    
+    ---
+    
+    ### **3. Visual Design of Empty States**
+    
+    1. **Iconography**:
+        - Use simple, non-intrusive icons for empty states (e.g., an empty clock for a blank timeline or an empty magnifying glass for no search results). These should be consistent with the overall iconography style.
+        - These icons should be lightly shaded or transparent to indicate that the state is inactive or awaiting user interaction.
+    2. **Illustration Style**:
+        - Consider a more abstract or symbolic illustration that hints at the underlying structure of the timeline without distracting from the message. For example, a faint outline of a historical map, a quill pen, or historical archives.
+        - The design should be minimalist to avoid clutter and make the empty state feel like a natural part of the interface.
+    3. **Background**:
+        - The background should remain consistent with the rest of the page’s visual design, with subtle gradients or textures that keep the user focused on the CTA and key information. The empty space itself should be framed in a way that encourages the user to fill the void.
+    
+    ---
+    
+    ### **4. User Engagement in Empty States**
+    
+    1. **Encouraging Participation**:
+        - Empty states should not just tell the user that there is no content, but actively encourage them to take the next step, such as adding events or searching for historical entries.
+        - The design of the empty state should make it clear that the user has control over filling the space and shaping the content.
+    2. **Educational Prompts**:
+        - In some cases, it might be helpful to include educational prompts or a quick tutorial about how to start using the page. For example, “Click on the ‘Add Event’ button to start shaping the timeline.”
+        - These prompts should be non-intrusive and appear only in the first empty state or when the user is likely to need help.
+    
+    ---
+    
+    ### **5. Example Empty State Messages**
+    
+    1. **Timeline Empty State**:
+        - "It looks like your timeline is empty. Start adding events to create your historical narrative."
+        - CTA: "Add Your First Event"
+    2. **Event Filter Empty State**:
+        - "No events match your current filter. Try clearing or adjusting your criteria."
+        - CTA: "Clear Filter" or "Adjust Filter"
+    3. **Event Details Empty State**:
+        - "This event is missing details. Add a description, date, and related entities to make it complete."
+        - CTA: "Add Details"
+    
+    ### 12. **Performance Considerations**
+    
+    The **Performance Considerations** section outlines the key aspects to ensure that the **TimelinePage** performs efficiently, even as it scales with larger datasets and complex user interactions. Ensuring smooth performance is critical to maintaining a positive user experience, particularly when users interact with dynamic timelines that may grow over time.
+    
+    ---
+    
+    ### **1. Loading and Rendering Optimization**
+    
+    1. **Lazy Loading**:
+        - The timeline should utilize **lazy loading** for events. Instead of loading all events at once, only the events visible in the viewport (or just outside it) should be loaded initially. As the user scrolls down the timeline, more events should be fetched and appended dynamically.
+        - **Implementation**: Use an Intersection Observer or similar approach to detect when new portions of the timeline are in view and trigger additional data requests.
+        - This method reduces the amount of data being loaded at any given time, speeding up the initial load and reducing memory usage.
+    2. **Pagination or Infinite Scroll**:
+        - Consider implementing **pagination** or **infinite scrolling** for large timelines, where the user can easily navigate between distinct sets of events, either by moving through pages or by continuously scrolling.
+        - If using infinite scrolling, ensure that the user experience remains smooth and responsive by not overloading the system with data.
+    3. **Data Caching**:
+        - Cache event data on the client side once it’s loaded, so that when users return to a previously visited section of the timeline, the data can be retrieved from the cache rather than fetched from the server again. This would reduce unnecessary network requests and enhance the speed of navigation.
+        - Implement strategies to ensure cached data stays fresh and is cleared when necessary (e.g., when the user adds new data or the content is updated).
+    
+    ---
+    
+    ### **2. Frontend Rendering Efficiency**
+    
+    1. **Virtualized Rendering**:
+        - Use **virtualization techniques** to render only the events visible in the user's viewport, especially for timelines with large numbers of events. Virtualization ensures that the page does not render all events at once but rather dynamically creates and destroys DOM elements as needed.
+        - This minimizes browser memory consumption and boosts rendering speed.
+    2. **Efficient Component Updates**:
+        - Ensure that changes to the timeline (e.g., adding, updating, or deleting events) are efficiently handled. Use **React’s shouldComponentUpdate** or **useMemo** to prevent unnecessary re-rendering of the entire timeline.
+        - Ensure that only the relevant parts of the timeline are re-rendered, reducing unnecessary DOM updates.
+    
+    ---
+    
+    ### **3. Data Fetching and API Requests**
+    
+    1. **Debounced or Throttled API Calls**:
+        - For actions such as filtering or searching the timeline, make sure that API requests are **debounced** (for search) or **throttled** (for filter updates) to avoid sending requests too frequently as the user interacts with the interface.
+        - Use a delay (e.g., 300ms) before sending the API request to avoid excessive network calls, which could slow down the app.
+    2. **Batching API Requests**:
+        - Where possible, batch multiple API requests together (e.g., retrieving events from a specific period or region). Instead of sending multiple smaller requests, combine them into a single request to reduce the number of HTTP calls and speed up data fetching.
+    
+    ---
+    
+    ### **4. Data Display Efficiency**
+    
+    1. **Event Rendering with Minimal DOM Manipulation**:
+        - Minimize the number of DOM elements created and updated when rendering events. Avoid complex DOM trees or excessive nesting, which can increase rendering times.
+        - Use efficient techniques like **document fragments** or **SVGs** for rendering large numbers of events to avoid bloating the DOM.
+    2. **Efficient Use of CSS for Animations**:
+        - If there are animations (such as loading indicators or transitions), ensure that they are performed using **CSS animations** rather than JavaScript, as they are typically more performant. Prefer **transform** and **opacity** over properties like **top** or **left** for smoother animations.
+    
+    ---
+    
+    ### **5. Responsive Design Performance**
+    
+    1. **Mobile-First Performance**:
+        - Ensure that performance is optimized for mobile-first design, where bandwidth and processing power are limited. This means:
+            - Use lightweight images and scalable vector graphics (SVGs).
+            - Limit the number of background processes and JavaScript tasks running in the background.
+            - Ensure responsive designs are quick to load and easy to interact with on smaller screens.
+    2. **Adaptive Content Loading**:
+        - For mobile users, consider delivering less content at once or offering options to “load more” events, rather than overwhelming the device with data. This could also be optimized based on the user’s device capabilities (e.g., reducing the quality of images for mobile).
+    
+    ---
+    
+    ### **6. Server-Side Optimizations**
+    
+    1. **Optimized Database Queries**:
+        - Ensure that the backend database queries for fetching events or timeline data are optimized, particularly when dealing with large datasets. Use indexing and avoid full table scans to make sure queries return results quickly.
+    2. **Compression and Data Minimization**:
+        - When sending data from the server to the client, use **compression** techniques such as GZIP to minimize the size of the data being transmitted. This ensures faster data transfers, especially for mobile devices with slower networks.
+        - Also, consider sending only the necessary data fields to reduce payload size.
+    
+    ---
+    
+    ### **7. Error Handling and Fallbacks**
+    
+    1. **Graceful Degradation**:
+        - Ensure that the **TimelinePage** continues to function even when parts of the data fail to load. If there is a network issue, the user should see a friendly error message and be given the option to retry fetching the data or check the network connection.
+        - Provide visual cues (e.g., a spinning loader or skeleton loaders) to keep the user informed while the data is loading.
+    2. **Load Error States**:
+        - When an error occurs while fetching or rendering timeline events, the UI should display a fallback state such as "Failed to load events. Please try again later" with a retry button. This will help prevent confusion or frustration from users experiencing issues with loading data.
+    
+    ---
+    
+    ### **8. Performance Testing**
+    
+    1. **Load Testing**:
+        - Conduct **load testing** to simulate a high volume of users accessing the TimelinePage simultaneously, especially when scaling to large datasets. This helps identify bottlenecks or performance degradation under stress.
+    2. **Profiling**:
+        - Regularly profile the performance of the TimelinePage using tools such as **React Profiler** or browser developer tools. This ensures that any performance regressions are detected early.
+    
+    ### 13. **Versioning & Iteration Plans**
+    
+    The **Versioning & Iteration Plans** section outlines the process for managing updates to the **TimelinePage**. It ensures that changes are introduced systematically, and that each iteration improves the user experience, functionality, and performance of the page.
+    
+    This section is critical to maintaining the project's long-term coherence and stability, particularly in a product where historical content is constantly evolving.
+    
+    ---
+    
+    ### **1. Versioning Overview**
+    
+    1. **Semantic Versioning**:
+        - **Major Changes**: Changes that introduce breaking changes to the user interface, data model, or core functionality. These would typically involve a significant overhaul or rework of the TimelinePage’s underlying system or features.
+        - **Minor Changes**: Updates that add new features or improve existing ones without breaking backward compatibility. For instance, adding new filtering capabilities or introducing minor UI tweaks.
+        - **Patch Updates**: Bug fixes, performance improvements, and small updates that do not introduce new features but ensure the page continues to function smoothly.
+        
+        The versioning for the **TimelinePage** will follow **Semantic Versioning** (MAJOR.MINOR.PATCH) to communicate the nature and scope of each release clearly.
+        
+    
+    ---
+    
+    ### **2. Iteration Plans**
+    
+    1. **Initial MVP Release**:
+        - **Version**: 1.0.0
+        - **Scope**: The MVP of the TimelinePage will include basic functionality like event display, chronological ordering, and the ability to link events to related entities, contradictions, and struggles.
+        - **Goal**: To validate the core concept and identify any immediate performance issues or UI flaws that need to be addressed.
+        - **Key Milestones**:
+            - Event data integration.
+            - Initial UI design with essential features like filtering and sorting.
+            - First-round user testing with feedback collection.
+    2. **Version 1.x.x - Stability & Feature Expansion**:
+        - **Version**: 1.1.0, 1.2.0, etc.
+        - **Scope**: This phase involves refining the TimelinePage based on initial feedback, adding more advanced features such as in-depth filtering, event search capabilities, and improved timeline interactions (e.g., zooming in and out of time periods).
+        - **Goal**: To enhance usability and performance while fixing bugs identified in the initial version. Feature additions will also help cater to the diverse needs of users (e.g., historians, political analysts).
+        - **Key Milestones**:
+            - Release of advanced filtering mechanisms.
+            - Full integration with external data sources for event updates.
+            - Incorporation of performance optimizations based on testing feedback.
+    3. **Version 2.0.0 - Feature Complete & Major Overhaul**:
+        - **Version**: 2.0.0
+        - **Scope**: This will be a major update, introducing a polished, feature-complete TimelinePage with a smooth, intuitive user experience. New features might include cross-referencing events with theory instances, enhanced visualizations of historical trends, or advanced timeline grouping.
+        - **Goal**: To make the page fully functional for wide public use while ensuring that performance remains fast even with large-scale data.
+        - **Key Milestones**:
+            - Cross-referencing with Theory Instances.
+            - Introduction of advanced visualizations or summary modes.
+            - Full mobile optimization and responsive design improvements.
+    4. **Version 3.x.x - Continued Optimization & Feature Evolution**:
+        - **Version**: 3.x.x, 4.x.x, etc.
+        - **Scope**: These are iterative updates that focus on refining the **TimelinePage** further, adding new features, expanding data interactivity, or introducing even better performance optimizations as Zoomout scales.
+        - **Goal**: To continuously evolve the TimelinePage based on feedback from users and improvements in technology and design practices.
+        - **Key Milestones**:
+            - Adding more data-rich interactive features.
+            - Supporting new data types and expanding integration with other Zoomout features.
+            - Continuous performance testing and optimization as new content is added.
+    
+    ---
+    
+    ### **3. Rollout Strategy**
+    
+    1. **Staged Rollout**:
+        - New versions and features will be rolled out in phases to prevent large-scale issues. This will include:
+            - **Beta testing** for new versions, with limited user access to gather feedback.
+            - **Canary releases** to test minor features on a small set of users before a wider release.
+            - **Full production releases** only when features are stable and user feedback has been integrated.
+    2. **Rollback Plan**:
+        - In case a new update causes significant issues (e.g., broken UI, performance issues, or critical bugs), the timeline will roll back to the previous stable version with a clear **rollback plan** to quickly revert the changes.
+        - A clear set of criteria will be defined to identify when to trigger a rollback.
+    3. **User Testing and Feedback**:
+        - Regular user feedback cycles will be incorporated, with focus groups testing specific TimelinePage features. This feedback will be crucial for fine-tuning features and ensuring that the updates align with the user’s needs.
+        - The feedback will be analyzed to ensure that all changes are necessary and align with user expectations.
+    
+    ---
+    
+    ### **4. Continuous Deployment**
+    
+    1. **Continuous Integration and Deployment** (CI/CD) will be set up to automate the deployment process for each new update to the **TimelinePage**.
+        - Code updates will be tested automatically with unit tests, integration tests, and UI tests to ensure that no bugs or regressions are introduced.
+        - Once the code passes all tests, it will be deployed to production in a seamless, uninterrupted manner.
+    
+    ---
+    
+    ### **5. Version History Documentation**
+    
+    1. **Changelog**:
+        - A detailed changelog will be maintained for every new version of the TimelinePage, which will include:
+            - **Release Notes**: A summary of the features, improvements, and bug fixes included in each version.
+            - **Known Issues**: Any outstanding bugs or issues that users may experience.
+            - **Deprecations**: Features that have been deprecated or removed.
+    
+    ### 14. **Test Criteria**
+    
+    The **Test Criteria** section outlines the standards and testing methodologies for evaluating the **TimelinePage**. It ensures that each version of the page is rigorously tested for functionality, performance, usability, and accessibility before being released to users. This helps maintain a high standard for the page and ensures it meets the necessary requirements and expectations.
+    
+    ---
+    
+    ### **1. Functional Testing**
+    
+    1. **Data Integration**:
+        - Ensure that all data from the backend (including event chronology, linked entities, and contradictions) is correctly displayed and updated in the timeline.
+        - Test that **event updates** are correctly propagated to the timeline in real-time.
+    2. **Event Interactivity**:
+        - Verify that users can interact with events (e.g., by clicking on events to view more information, expand details, or navigate to related entities and struggles).
+        - Ensure that all interactive features (such as event filtering, sorting, and zooming in/out) function as expected.
+    3. **Navigation**:
+        - Ensure users can smoothly navigate through time periods (e.g., zooming in on specific time periods, scrolling horizontally through the timeline, and filtering by specific categories or attributes).
+        - Test navigation between TimelinePage and other pages (e.g., Entity Pages, Contradiction Pages).
+    
+    ---
+    
+    ### **2. Usability Testing**
+    
+    1. **User Interface (UI) Feedback**:
+        - Gather feedback on the overall user interface, ensuring that the layout and design are intuitive, clear, and easy to navigate.
+        - Conduct A/B testing on different visual designs or feature layouts to identify the best approach.
+    2. **User Experience (UX)**:
+        - Evaluate the overall user journey to ensure that the TimelinePage is easy to use and navigate.
+        - Test with different user groups (e.g., historians, researchers, and general public) to understand varying needs and refine features.
+    3. **Mobile Responsiveness**:
+        - Verify that the TimelinePage is fully responsive, ensuring that it looks and functions well across devices (e.g., desktop, tablet, mobile).
+        - Test for touch interaction on mobile devices (e.g., zooming, swiping, scrolling).
+    
+    ---
+    
+    ### **3. Performance Testing**
+    
+    1. **Load Testing**:
+        - Simulate high levels of traffic to ensure the **TimelinePage** remains responsive under heavy loads (e.g., large data sets or multiple simultaneous users).
+        - Measure page load time, responsiveness, and resource usage (e.g., CPU and memory consumption) when accessing different parts of the page.
+    2. **Stress Testing**:
+        - Test the system’s ability to handle extreme conditions, such as a large number of events or high-frequency updates.
+        - Assess whether the **TimelinePage** can gracefully handle data overloads and recover from potential crashes or slowdowns.
+    3. **Data Volume Testing**:
+        - Evaluate the timeline’s ability to handle different data volumes. For example, how well it manages hundreds, thousands, or even millions of events and entities over time.
+        - Test the performance of event sorting, filtering, and zooming at scale.
+    
+    ---
+    
+    ### **4. Accessibility Testing**
+    
+    1. **Keyboard Navigation**:
+        - Ensure the TimelinePage can be fully navigated using a keyboard, with easy access to all interactive elements (e.g., event details, filters, and zooming functions).
+        - Verify that all controls have appropriate keyboard shortcuts where applicable.
+    2. **Screen Reader Compatibility**:
+        - Test the TimelinePage for compatibility with screen readers to ensure that all information (such as event names, dates, and details) is properly announced to users with visual impairments.
+    3. **Color Contrast**:
+        - Check the page’s color contrast to ensure it meets accessibility guidelines (e.g., WCAG 2.0 AA standards) for users with color blindness or low vision.
+    4. **Text Resizing**:
+        - Verify that text on the **TimelinePage** is legible when resized, ensuring readability for users with varying visual needs.
+        - Test how the page layout adapts to changes in text size.
+    
+    ---
+    
+    ### **5. Security Testing**
+    
+    1. **Data Security**:
+        - Ensure that any personal or sensitive data displayed on the **TimelinePage** is secure and properly encrypted.
+        - Test that no unauthorized data access is possible through the page.
+    2. **Cross-Site Scripting (XSS) and Cross-Site Request Forgery (CSRF) Protection**:
+        - Verify that the **TimelinePage** is secure from common web vulnerabilities like XSS and CSRF attacks.
+        - Test input validation to prevent malicious scripts from being executed.
+    3. **Session Management**:
+        - Test for secure session management, ensuring that sessions time out appropriately and that unauthorized users cannot access restricted content.
+    
+    ---
+    
+    ### **6. Regression Testing**
+    
+    1. **Feature Regression**:
+        - Test previously working features (e.g., event filters, zoom functions) to ensure that new updates have not introduced bugs or broken functionality.
+        - Maintain a suite of regression tests to track issues that may arise with future updates.
+    2. **Cross-Browser Testing**:
+        - Test the TimelinePage across multiple browsers (e.g., Chrome, Firefox, Safari, Edge) to ensure consistent functionality and appearance.
+        - Identify and address any browser-specific issues that may arise during updates.
+    
+    ### 15. **Mobile-First Design Considerations**
+    
+    The **Mobile-First Design Considerations** section focuses on ensuring that the **TimelinePage** is optimized for mobile devices, providing a seamless and engaging user experience across smartphones and tablets. Since mobile usage continues to rise, designing the page with mobile-first principles ensures that it performs well even on devices with smaller screens, limited processing power, and varying network conditions.
+    
+    ---
+    
+    ### **1. Layout and Responsiveness**
+    
+    1. **Fluid Layout**:
+        - The layout should be **fluid**, adjusting seamlessly to various screen sizes. Elements should resize or reposition themselves to accommodate different screen widths (e.g., mobile phones, tablets, and desktops).
+        - Test that key elements such as the timeline, event markers, and filters remain legible and usable on smaller screens.
+    2. **Single-Column Layout**:
+        - On mobile devices, the timeline should switch to a **single-column layout**, with the events stacked vertically to ensure better readability and ease of scrolling.
+        - Ensure that the horizontal timeline scrolling seen on desktop is optimized or replaced with a swipe-friendly mechanism on mobile.
+    3. **Scalable Events**:
+        - Events should be **scalable** on mobile devices. For example, tapping on an event should expand it into a modal or slide-out panel that allows users to view details.
+        - Ensure that the font size and event markers are appropriately scaled for readability on mobile screens.
+    4. **Event Interaction**:
+        - Provide a **tap-friendly interface** for interacting with events, making sure that touch targets (e.g., event cards or buttons) are appropriately sized and spaced to prevent accidental taps.
+        - Implement smooth gestures such as swiping to navigate through different periods of time or zoom in/out of the timeline.
+    
+    ---
+    
+    ### **2. Touch Interactions**
+    
+    1. **Touch-Friendly Controls**:
+        - Ensure all interactive elements on the TimelinePage (e.g., filters, zoom controls, event detail pop-ups) are **optimized for touch interactions**. This includes making buttons large enough and ensuring sliders and dropdowns are easily operable with fingers.
+    2. **Swipe and Tap Gestures**:
+        - Implement **swipe gestures** for moving through the timeline and **tap gestures** for interacting with specific events.
+        - Ensure the user can scroll horizontally through the timeline or vertically through event lists by swiping left/right and up/down, respectively.
+    3. **Zooming**:
+        - The ability to zoom in and out of the timeline should be **touch-optimized**, with pinch-to-zoom functionality available for mobile users.
+        - Ensure that zooming doesn’t break the layout, and that it maintains the timeline’s readability on smaller screens.
+    
+    ---
+    
+    ### **3. Mobile Navigation**
+    
+    1. **Simplified Navigation Menu**:
+        - The **main navigation menu** should be condensed into a hamburger-style or bottom navigation bar on mobile devices to save screen space and make navigation easier.
+        - Ensure all essential pages, such as the **TimelinePage**, **Entity Pages**, and **Contradiction Pages**, are easily accessible from the mobile menu.
+    2. **Sticky Navigation**:
+        - For better usability, consider implementing a **sticky navigation bar** or **floating action button** that allows users to quickly access important features such as filtering or accessing the timeline overview.
+    3. **Search Functionality**:
+        - Ensure that the search bar is **easily accessible**, either through a floating search icon or as part of the top navigation.
+        - On mobile devices, consider implementing **voice search** or **autocomplete** features to enhance search usability.
+    
+    ---
+    
+    ### **4. Performance Optimization**
+    
+    1. **Fast Load Times**:
+        - Mobile devices may have slower internet connections, so the **TimelinePage** should be optimized to load quickly on 3G/4G connections.
+        - Test load times on both Wi-Fi and mobile data to ensure a smooth user experience across different network conditions.
+    2. **Lazy Loading**:
+        - Implement **lazy loading** for events and related data. This ensures that only the relevant portions of the timeline are loaded as the user scrolls, reducing the initial load time and saving mobile data.
+    3. **Image and Asset Optimization**:
+        - Optimize images and assets (e.g., event icons, markers) for mobile use. Compress images to reduce load times without sacrificing visual quality.
+    
+    ---
+    
+    ### **5. Touch Gestures for Zooming and Scrolling**
+    
+    1. **Smooth Zooming**:
+        - The zoom functionality should be responsive to touch gestures such as pinch-to-zoom, with smooth transitions between zoom levels. The timeline’s events should dynamically adjust their display without glitches.
+    2. **Zoom Persistence**:
+        - Ensure that after zooming in or out, the timeline retains its position relative to the timeline's scale, allowing the user to navigate the zoomed-in sections with ease.
+    
+    ### 16. **Integration Points**
+    
+    The **Integration Points** section defines how the **TimelinePage** connects and interacts with other pages, systems, and services within Zoomout. This ensures that the page is not a standalone entity, but rather an integrated part of a larger ecosystem that relies on data flows and user interactions. It outlines external and internal integration mechanisms, data sharing protocols, and the role the **TimelinePage** plays in Zoomout's broader architecture.
+    
+    ---
+    
+    ### **1. Data Integration with Sheets**
+    
+    1. **Event Data**:
+        - The TimelinePage will pull data from the **Events Sheet** and display chronological events along the timeline. Changes or updates to event data should automatically reflect on the TimelinePage.
+        - Events will be linked to **Entities** (e.g., political figures, organizations) and **Contradictions** (specific ideological, social, or material struggles). Any updates or changes to these entities and contradictions should trigger updates to the events presented on the timeline.
+    2. **Contradiction-Event Relationship**:
+        - TimelinePage will dynamically display which **contradictions** correspond to particular **events** within the timeline. This requires the **Contradictions Sheet** to be updated and consistently synced with the events data.
+        - The page should support live updates, meaning that if a user interacts with an event, they can view the contradictions associated with that event and access detailed information.
+    
+    ---
+    
+    ### **2. Integration with Theory and Ideology**
+    
+    1. **Linking Theory Instances**:
+        - The TimelinePage should also integrate **Theory Instances** from the Theory Instance Sheet. When specific events in the timeline are related to certain theories or ideological stances, this should be visible and clickable for the user to explore further.
+        - If an event is framed within a particular theory, users should be able to explore how the event fits into a broader theoretical framework by linking to relevant **Theory Objects**.
+    2. **Ideological Filters**:
+        - The TimelinePage should allow for filtering events based on **theoretical** or **ideological** perspectives. For example, filtering events by a particular **Theory Object** (such as Marxism or Feminism) and seeing the corresponding timeline events.
+        - Integration with the **Theory Object Sheet** will enable users to interact with events filtered through specific ideological lenses.
+    
+    ---
+    
+    ### **3. Interaction with Other Pages**
+    
+    1. **Entity Linking**:
+        - Every event shown on the **TimelinePage** should link to its corresponding **Entity Pages**. For example, an event related to a prominent political figure should be clickable, taking the user to the **Entity Page** where they can explore the historical context, actions, and stances of that entity.
+        - Entities should be populated with data from the **Entities Sheet** and maintained as dynamic content, ensuring the linkage between events and the corresponding entities remains accurate and up to date.
+    2. **Contradiction and Struggle Views**:
+        - When an event in the timeline is clicked, users should also be able to view relevant **Contradiction Pages** and **Struggle Pages**. This feature allows users to explore the tensions that underlie the event, giving them access to deeper contextualization.
+        - The **Contradictions Sheet** and **Struggles Sheet** should be integrated to make this seamless, ensuring each event is contextually connected to the larger struggle or contradiction that it embodies.
+    3. **Reporting Page**:
+        - The **TimelinePage** should also allow users to link to the **ReportingPage** for a more detailed report or analysis on an event. This could be a more in-depth discussion or external links relevant to the event’s historical impact.
+        - The **ReportingPage** links should be part of the event metadata for each entry on the TimelinePage, enabling smooth transitions between timeline navigation and analytical reporting.
+    
+    ---
+    
+    ### **4. External Data Integration**
+    
+    1. **External Media (Articles, Tweets, etc.)**:
+        - To enrich the timeline, the TimelinePage should allow integration with **external media sources** such as news articles, tweets, videos, etc., related to specific events. This would be fetched dynamically from external sources or APIs, providing real-time context to users.
+        - Links to external media should be embedded into events, offering additional perspectives on the events and enabling users to see media coverage from different points in history.
+    2. **API Integration**:
+        - If needed, the TimelinePage should support the **integration of external data via APIs**. This could include pulling relevant historical data or related content from other databases or archives (such as government databases, academic publications, or historical archives).
+        - API connections should be optimized for performance, ensuring that the page remains fast even when external data is being retrieved.
+    
+    ---
+    
+    ### **5. User-Generated Content**
+    
+    1. **Event Annotations**:
+        - Users should have the ability to **annotate events** with their insights or add commentary directly to events on the timeline. These annotations should be stored in a user-specific or community-driven section.
+        - Annotations should be dynamically linked to the **Event** and accessible for others who view the event, fostering collaborative knowledge-building.
+    2. **Feedback Loop**:
+        - The TimelinePage should integrate a **feedback mechanism** where users can propose edits, corrections, or updates to events on the timeline. These should be sent to the admin or review system for validation before being integrated into the database.
+        - This feature ensures that the historical data presented on the page remains collaborative and open to community-driven input, encouraging a more participatory approach to history.

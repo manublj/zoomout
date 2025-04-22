@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Spinner, Table, Modal } from 'react-bootstrap';
-import ReportingForm from '../components/forms/ReportingForm';
-import SearchBar from '../components/SearchBar';
-import FloatingButton from '../components/ui/FloatingButton';
+import SearchBar from '../components/common/SearchBar';
+import FloatingButton from '../components/common/FloatingButton';
 import { getSheetData, SHEET_NAMES } from '../api/googleSheetsApi';
+import FormsPage from './FormsPage';
 
 const ReportingPage = () => {
   const [reports, setReports] = useState([]);
@@ -30,7 +30,7 @@ const ReportingPage = () => {
     setSearchQuery(query);
   };
 
-  const filteredReports = reports.filter(report => {
+  const filteredReports = reports.filter((report) => {
     if (!searchQuery) return true;
     const searchFields = [
       report.HEADLINE,
@@ -38,9 +38,9 @@ const ReportingPage = () => {
       report.REGION,
       report.WHO,
       report.POST_CONTENT || '',
-      report.SRC_TYPE || ''
+      report.SRC_TYPE || '',
     ];
-    return searchFields.some(field => 
+    return searchFields.some((field) =>
       field && field.toString().toLowerCase().includes(searchQuery.toLowerCase())
     );
   });
@@ -89,25 +89,13 @@ const ReportingPage = () => {
         )}
       </Row>
       <FloatingButton onClick={() => setShowForm(true)} />
-      
-      <Modal 
-        show={showForm} 
-        onHide={() => setShowForm(false)}
-        size="lg"
-        centered
-      >
+
+      <Modal show={showForm} onHide={() => setShowForm(false)} size="lg" centered>
         <Modal.Header closeButton>
           <Modal.Title>Add New Report</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <ReportingForm 
-            show={showForm}
-            onHide={() => setShowForm(false)}
-            onSubmit={(formData) => {
-              setShowForm(false);
-              fetchReports();
-            }}
-          />
+          <FormsPage />
         </Modal.Body>
       </Modal>
     </Container>

@@ -1,3 +1,24 @@
+import Joi from 'joi';
+import { formConfigs } from './formUtils';
+import { validateDynamicForm } from './validation';
+
+export const eventValidationSchema = Joi.object({
+  event_id: Joi.string().required(),
+  headline: Joi.string().required(),
+  event_date: Joi.date().required(),
+  location: Joi.string().allow(''), // Changed from .allow([])
+  contradiction_id: Joi.string().required(),
+  // Fix array validation
+  struggle_id: Joi.array().items(Joi.string()).single(), // Changed from .allow([])
+  impact: Joi.string().valid('Low', 'Medium', 'High').when('event_type_tag', {
+    is: 'action',
+    then: Joi.required(),
+    otherwise: Joi.optional()
+  })
+  // Add other fields as needed...
+});
+
+// Sheet configuration constants
 export const SHEET_CONFIG = {
   ENTITIES: {
     fields: {
@@ -279,7 +300,46 @@ export const SHEET_CONFIG = {
       'macro_micro',
       'event_relevance'
     ]
-  }
+  },
+  TIMELINES: {
+    fields: {
+      timeline_id: { type: 'text', required: true, auto: true, label: 'Timeline ID' },
+      title: { type: 'text', required: true, label: 'Title' },
+      description: { type: 'textarea', required: true, label: 'Description' },
+      linked_phases: { type: 'linked', linkedSheet: 'TIMELINE_REGISTRY', multiple: true, label: 'Linked Phases' },
+      linked_grid_rows: { type: 'linked', linkedSheet: 'TIMELINE_GRID', multiple: true, label: 'Linked Grid Rows' },
+      category: { type: 'select', required: true, options: ['Historical', 'Current'], label: 'Category' },
+      is_public: { type: 'boolean', required: true, label: 'Is Public' },
+    },
+    displayOrder: ['timeline_id', 'title', 'description', 'linked_phases', 'linked_grid_rows', 'category', 'is_public'],
+  },
+  TIMELINE_REGISTRY: {
+    fields: {
+      phase_id: { type: 'text', required: true, auto: true, label: 'Phase ID' },
+      phase_label: { type: 'text', required: true, label: 'Phase Label' },
+      description: { type: 'textarea', required: true, label: 'Description' },
+      anchor_contradiction: { type: 'linked', linkedSheet: 'CONTRADICTIONS', label: 'Anchor Contradiction' },
+      linked_struggle: { type: 'linked', linkedSheet: 'STRUGGLES', label: 'Linked Struggle' },
+      linked_events: { type: 'linked', linkedSheet: 'EVENTS', multiple: true, label: 'Linked Events' },
+      linked_entities: { type: 'linked', linkedSheet: 'ENTITIES', multiple: true, label: 'Linked Entities' },
+      date_range: { type: 'dateRange', required: true, label: 'Date Range' },
+      current_phase: { type: 'boolean', label: 'Current Phase' },
+    },
+    displayOrder: ['phase_id', 'phase_label', 'description', 'anchor_contradiction', 'linked_struggle', 'linked_events', 'linked_entities', 'date_range', 'current_phase'],
+  },
+  TIMELINE_GRID: {
+    fields: {
+      timeline_grid_id: { type: 'text', required: true, auto: true, label: 'Timeline Grid ID' },
+      linked_phase_id: { type: 'linked', linkedSheet: 'TIMELINE_REGISTRY', label: 'Linked Phase ID' },
+      zoom_level: { type: 'select', required: true, options: ['Event', 'Issue', 'Struggle', 'Contradiction'], label: 'Zoom Level' },
+      linked_item_id: { type: 'linked', linkedSheet: 'EVENTS', label: 'Linked Item ID' },
+      label: { type: 'text', required: true, label: 'Label' },
+      notes: { type: 'textarea', label: 'Notes' },
+      weight: { type: 'number', label: 'Weight' },
+      color_tag: { type: 'tags', label: 'Color Tag' },
+    },
+    displayOrder: ['timeline_grid_id', 'linked_phase_id', 'zoom_level', 'linked_item_id', 'label', 'notes', 'weight', 'color_tag'],
+  },
 };
 
 export const validateFormData = (formType, formData) => {
@@ -293,7 +353,6 @@ export const validateFormData = (formType, formData) => {
   }
 
   Object.entries(config.fields).forEach(([fieldName, fieldConfig]) => {
-    // Skip validation if field has a condition that isn't met
     if (fieldConfig.condition && !fieldConfig.condition(formData)) {
       return;
     }
@@ -346,6 +405,25 @@ export const validateEvent = (event) => {
 
   return errors;
 };
+
+// Validate form data based on sheet type
+export function validateFormByType(sheetType, formData) {
+  // For new schema-driven forms
+  if (formData.useDynamicForm) {
+    return validateDynamicForm(formData.formConfig, formData);
+  }
+  
+  // For legacy sheet-based forms
+  const formConfig = formConfigs[sheetType];
+  if (!formConfig) {
+    throw new Error(`No form configuration found for sheet: ${sheetType}`);
+  }
+
+  return validateFormData(formConfig, formData);
+}
+
+// Export sheet names for use in UI
+export const SHEET_NAMES = Object.keys(SHEET_CONFIG);
 
 const schemas = {
     ENTITIES: {

@@ -3,6 +3,9 @@ const path = require('path');
 
 module.exports = {
   resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'), // Add this line to configure the alias
+    },
     fallback: {
       "https": require.resolve("https-browserify"),
       "http": require.resolve("stream-http"),

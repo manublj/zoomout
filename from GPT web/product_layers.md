@@ -56,15 +56,15 @@ Zoomout adapts to different publics using **tactical framing** — bundling serv
 
 ### Tactical Frames (Examples)
 
-| Frame | Audience | Bundle |
-|-------|----------|--------|
-| Dialectical Engine | Theory/Philosophy | Curriculum Mode + Threading Engine |
-| Polygraph Engine | Journalists/Analysts | Contradiction Tracker + Confidence Layer |
-| Class Struggle Engine | Movements/Organizers | Timeline Grid + Escalation Modeling |
-| Zoomout as Host | Digital Humanities | Federated multi-user contradiction datasets |
-| Materialism-as-a-Service | Tech/Infra | Cloud access to timelines + contradictions |
-| DA Interface (Mythic Layer) | Internal | Polygraph + Threading + Curriculum |
-| Personal Curriculum | Students | Learning loop from contradiction datasets |
+| Frame                       | Audience             | Bundle                                      |
+|-----------------------------|----------------------|---------------------------------------------|
+| Dialectical Engine          | Theory/Philosophy    | Curriculum Mode + Threading Engine          |
+| Polygraph Engine            | Journalists/Analysts | Contradiction Tracker + Confidence Layer    |
+| Class Struggle Engine       | Movements/Organizers | Timeline Grid + Escalation Modeling         |
+| Zoomout as Host             | Digital Humanities   | Federated multi-user contradiction datasets |
+| Materialism-as-a-Service    | Tech/Infra           | Cloud access to timelines + contradictions  |
+| DA Interface (Mythic Layer) | Internal             | Polygraph + Threading + Curriculum          |
+| Personal Curriculum         | Students             | Learning loop from contradiction datasets   |
 
 This is how Zoomout **interfaces with sectors** without compromising its ontology.
 

@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Tabs, Tab, Button, Spinner, Table, Form } from 'react-bootstrap';
 import CardView from '../components/article/CardView';
-import EntitiesForm from '../components/forms/EntitiesForm';
-import SearchBar from '../components/SearchBar';
-import FloatingButton from '../components/ui/FloatingButton';
+import SearchBar from '../components/common/SearchBar';
+import FloatingButton from '../components/common/FloatingButton';
 import { getSheetData, addRowToSheet } from '../api/googleSheetsApi';
 import { MultiSelect } from 'react-multi-select-component';
 import { SHEET_CONFIG } from '../utils/sheetValidation';
 import { validateFormData, transformFormDataForSheet } from '../utils/validation';
 import { SHEET_NAMES } from '../api/googleSheetsApi';
+import FormsPage from './FormsPage';
 
 const EntitiesPage = () => {
   const [entities, setEntities] = useState([]);
@@ -248,15 +248,6 @@ const EntitiesPage = () => {
               <SearchBar onSearch={handleSearch} />
             </Col>
           </Row>
-          <EntitiesForm
-            show={showForm}
-            onHide={() => setShowForm(false)}
-            formData={formData}
-            errors={errors}
-            onChange={handleChange}
-            onMultiSelectChange={handleMultiSelectChange}
-            onSubmit={handleFormSubmit}
-          />
           <Tabs
             activeKey={activeTab}
             onSelect={(k) => setActiveTab(k)}
@@ -314,3 +305,8 @@ const EntitiesPage = () => {
 };
 
 export default EntitiesPage;
+
+document.addEventListener('DOMContentLoaded', () => {
+  const entitiesPage = new FormsPage('app-container');
+  entitiesPage.render();
+});

@@ -1,0 +1,57 @@
+/* General Page Styling */
+.timeline-page {
+  background-color: #f9f9f9;
+  padding: 20px;
+}
+
+.timeline-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.timeline-header h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.timeline-header p {
+  font-size: 1rem;
+  color: #666;
+}
+
+/* Filters Section */
+.timeline-filters {
+  margin-bottom: 20px;
+}
+
+/* Main Timeline Section */
+.timeline-main {
+  padding: 20px;
+}
+
+.timeline-view {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.timeline-event-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.timeline-event-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.timeline-thread-connector {
+  height: 2px;
+  background-color: #ddd;
+  margin: 10px 0;
+}

@@ -1,0 +1,68 @@
+.structures-page {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+}
+
+.structures-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.structures-header h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.structures-header p {
+  font-size: 1rem;
+  color: #666;
+}
+
+.structures-main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+}
+
+.structures-grid {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.structures-grid > * {
+  margin-bottom: 20px;
+}
+
+.structures-column {
+  flex: 1;
+  min-width: 200px;
+}
+
+.column-title {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  text-transform: capitalize;
+}
+
+.economic .column-title {
+  color: #4682b4;
+}
+
+.political .column-title {
+  color: #b22222;
+}
+
+.social .column-title {
+  color: #008080;
+}
+
+.cultural .column-title {
+  color: #cc5500;
+}
