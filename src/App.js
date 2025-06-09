@@ -10,8 +10,10 @@ import StructuresPage from './pages/StructuresPage';
 import ContradictionsPage from './pages/ContradictionsPage';
 import StrugglesPage from './pages/StrugglesPage';
 import FormsPage from './pages/FormsPage';
+import TimelineComponentsTest from './pages/TimelineComponentsTest';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import './styles/root.css';
 
 const App = () => {
   return (
@@ -28,6 +30,7 @@ const App = () => {
             <Route path="/theory" element={<TheoryPage />} />
             <Route path="/wiki" element={<EntitiesPage />} />
             <Route path="/reporting" element={<ReportingPage />} />
+            <Route path="/timeline-test" element={<TimelineComponentsTest />} />
           </Routes>
         </Container>
       </div>

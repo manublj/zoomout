@@ -1,68 +1,319 @@
 .structures-page {
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
-}
-
-.structures-header {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.structures-header h1 {
-  font-size: 2rem;
-  margin-bottom: 10px;
-  color: #333;
-}
-
-.structures-header p {
-  font-size: 1rem;
-  color: #666;
-}
-
-.structures-main {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #000;
+  color: #fff;
+  font-family: 'Courier New', monospace;
+  padding: 1rem;
+  position: relative;
 }
 
-.structures-grid {
+/* Base Layer (Terrain) */
+.base-layer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40vh;
+  background: linear-gradient(to top, #111 0%, #000 100%);
+  opacity: 0.8;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  padding: 2rem;
+  overflow: hidden;
+}
+
+.base-structures {
   display: flex;
   justify-content: space-between;
-  gap: 20px;
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
+  height: 100%;
+  position: relative;
 }
 
-.structures-grid > * {
-  margin-bottom: 20px;
+.base-structure {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #333;
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
 }
 
-.structures-column {
-  flex: 1;
-  min-width: 200px;
+.base-structure:hover {
+  background-color: rgba(17, 17, 17, 0.8);
+}
+
+.base-structure::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    #333,
+    #333 10px,
+    transparent 10px,
+    transparent 20px
+  );
+}
+
+/* Superstructure Layer */
+.superstructure-layer {
+  position: relative;
+  z-index: 2;
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.superstructure-column {
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 1px solid #fff;
+  padding: 1rem;
+  position: relative;
+}
+
+.superstructure-column::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 20px;
+  background: linear-gradient(to top, #fff, transparent);
 }
 
 .column-title {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-  text-transform: capitalize;
+  text-align: center;
+  padding: 0.5rem;
+  border-bottom: 1px solid #fff;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
 }
 
-.economic .column-title {
-  color: #4682b4;
+/* Structure Cards */
+.structure-card {
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 1px solid #fff;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
 }
 
-.political .column-title {
-  color: #b22222;
+.structure-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
 }
 
-.social .column-title {
-  color: #008080;
+.structure-card::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 10px;
+  background: linear-gradient(to bottom, #fff, transparent);
 }
 
-.cultural .column-title {
-  color: #cc5500;
+/* Connection Lines */
+.connection-line {
+  position: absolute;
+  background: linear-gradient(to bottom, #fff, transparent);
+  width: 1px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Header Styles */
+.structures-header {
+  position: relative;
+  z-index: 3;
+  background-color: rgba(0, 0, 0, 0.9);
+  padding: 1rem;
+  border: 1px solid #fff;
+  margin-bottom: 1rem;
+}
+
+.header-title {
+  font-size: 1.2rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #fff;
+  padding-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.filters-container {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  padding: 0.5rem;
+  border-top: 1px solid #fff;
+}
+
+.filter-select {
+  padding: 0.5rem;
+  background-color: #000;
+  color: #fff;
+  border: 1px solid #fff;
+  font-family: 'Courier New', monospace;
+  min-width: 200px;
+}
+
+.filter-select option {
+  background-color: #000;
+  color: #fff;
+}
+
+/* Detail Modal */
+.modal-content {
+  background-color: rgba(0, 0, 0, 0.95);
+  border: 1px solid #fff;
+  padding: 2rem;
+  position: relative;
+  z-index: 4;
+}
+
+.modal-header {
+  border-bottom: 1px solid #fff;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.modal-header h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+  font-weight: normal;
+}
+
+.structure-meta {
+  color: #aaa;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.detail-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #fff;
+  padding-bottom: 0.5rem;
+}
+
+.tab {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #aaa;
+  font-family: 'Courier New', monospace;
+  border-bottom: 1px solid transparent;
+}
+
+.tab.active {
+  color: #fff;
+  border-bottom-color: #fff;
+}
+
+.tab-content {
+  padding: 1rem 0;
+}
+
+.tab-content h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  font-weight: normal;
+}
+
+.tab-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tab-content li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #333;
+  color: #aaa;
+}
+
+/* Timeline Visualization */
+.timeline-visualization {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: rgba(17, 17, 17, 0.8);
+  border: 1px solid #fff;
+}
+
+.timeline-track {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px solid #fff;
+}
+
+.timeline-event {
+  padding: 0.25rem 0.5rem;
+  background-color: rgba(17, 17, 17, 0.8);
+  border: 1px solid #fff;
+  font-size: 0.9rem;
+}
+
+/* ASCII Art Borders */
+.structures-page::before {
+  content: "+" repeat(100) "+";
+  display: block;
+  margin-bottom: 1rem;
+  white-space: pre;
+  font-family: monospace;
+}
+
+.structures-page::after {
+  content: "+" repeat(100) "+";
+  display: block;
+  margin-top: 1rem;
+  white-space: pre;
+  font-family: monospace;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .superstructure-layer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .base-structures {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 768px) {
+  .superstructure-layer {
+    grid-template-columns: 1fr;
+  }
+  
+  .filters-container {
+    flex-direction: column;
+  }
+  
+  .filter-select {
+    width: 100%;
+  }
 }

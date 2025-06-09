@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Tabs, Tab, Button, Spinner, Table, Form } from 'react-bootstrap';
+import { Container, Row, Col, Tabs, Tab, Button, Spinner, Table, Form, Modal } from 'react-bootstrap';
 import CardView from '../components/article/CardView';
 import SearchBar from '../components/common/SearchBar';
 import FloatingButton from '../components/common/FloatingButton';
@@ -8,7 +8,8 @@ import { MultiSelect } from 'react-multi-select-component';
 import { SHEET_CONFIG } from '../utils/sheetValidation';
 import { validateFormData, transformFormDataForSheet } from '../utils/validation';
 import { SHEET_NAMES } from '../api/googleSheetsApi';
-import FormsPage from './FormsPage';
+import DynamicForm from '../components/pages/forms/DynamicForm';
+import { formConfigs } from '../utils/formUtils';
 
 const EntitiesPage = () => {
   const [entities, setEntities] = useState([]);
@@ -87,37 +88,18 @@ const EntitiesPage = () => {
     return related;
   };
 
-  const handleFormSubmit = async (e) => {
-    if (e) e.preventDefault();
-
-    const { isValid, errors: validationErrors } = validateFormData(SHEET_NAMES.ENTITIES, formData);
-    
-    if (!isValid) {
-      setErrors(validationErrors);
-      return;
-    }
-
+  const handleFormSubmit = async (formData) => {
     try {
-      console.log('Submitting form data:', formData); // Debug log
+      setLoading(true);
       const transformedData = transformFormDataForSheet(SHEET_NAMES.ENTITIES, formData);
-      console.log('Transformed data:', transformedData); // Debug log
-      
       await addRowToSheet(SHEET_NAMES.ENTITIES, transformedData);
-      console.log('Data successfully added to sheet'); // Debug log
-      
-      // Reset form and fetch updated data
-      setFormData({
-        WHO: [],
-        bio: '',
-        entity_type: '',
-        SPECTRUM: ''
-      });
-      setErrors({});
       setShowForm(false);
       await fetchData();
     } catch (error) {
       console.error('Error submitting form:', error);
       setErrors({ submit: 'Failed to save entity. Please try again.' });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -269,6 +251,20 @@ const EntitiesPage = () => {
       {renderEntityContent(activeTab)}
 
       <FloatingButton onClick={() => setShowForm(true)} />
+
+      <Modal show={showForm} onHide={() => setShowForm(false)} size="lg" centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Add New Entity</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <DynamicForm
+            sheetName="ENTITIES"
+            config={formConfigs.ENTITIES}
+            onSubmit={handleFormSubmit}
+            loading={loading}
+          />
+        </Modal.Body>
+      </Modal>
     </Container>
   );
   
@@ -305,8 +301,3 @@ const EntitiesPage = () => {
 };
 
 export default EntitiesPage;
-
-document.addEventListener('DOMContentLoaded', () => {
-  const entitiesPage = new FormsPage('app-container');
-  entitiesPage.render();
-});

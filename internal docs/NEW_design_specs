@@ -1,0 +1,135 @@
+Here are the **consolidated design specifications** for the **`TimelinePage`** in Zoomout, based on your locked-in ASCII visualization and system architecture:
+
+---
+
+## 🔧 1. **Layout**
+
+A vertically stacked, horizontally scrollable interface structured into the following main blocks:
+
+* **Header / Title Block**: Zoomout identity and page title
+* **Top Controls Bar**: Search, filters, zoom
+* **Legend**: Color-coded categories
+* **Contradiction Summary**: Box showing active contradiction’s meaning
+* **Timeline Canvas**: Scrollable canvas of rows, one per contradiction timeline
+* **Timeline Zoom & Scroll Controls**
+* **Slide-in Panels** (conditionally rendered): Phase, Event, Timeline detail
+* **Footer**
+
+---
+
+## 🎯 2. **Visual Hierarchy & Design Considerations**
+
+| Element                | Role                         | Priority    | Style Notes                     |
+| ---------------------- | ---------------------------- | ----------- | ------------------------------- |
+| Page Title             | Branding + orientation       | High        | Bold, left-aligned              |
+| Filters Bar            | User control interface       | High        | Subtle borders, intuitive icons |
+| Contradiction Summary  | Anchoring frame of reference | Medium-High | Italic, muted background        |
+| Timeline Rows          | Core visual element          | Highest     | Equal height rows, color-coded  |
+| Event Dots             | Navigation + exploration     | High        | Hover effects, tooltips         |
+| Panels                 | Deep info layers             | On-demand   | Slide-in, z-index overlay       |
+| Zoom & Scroll Controls | Utility navigation           | Medium      | Fixed positioning               |
+| Footer                 | Low context                  | Low         | Minimal style                   |
+
+---
+
+## 🧩 3. **Component Breakdown**
+
+```
+<TimelinePage>
+├── <FiltersAndControls>
+│   ├── <SearchBar />
+│   ├── <CategoryFilter />
+│   ├── <ContradictionFilter />
+│   └── <ZoomSelector />
+├── <LegendBar>
+│   └── <LegendItem /> × n
+├── <CoreContradictionSummary />
+├── <TimelineCanvas>
+│   └── <TimelineRow> × 7
+│       ├── <TimelineLabel />
+│       └── <TimelineTrack>
+│           ├── <PhaseBlock /> × n
+│           └── <EventDot /> × n
+├── <ZoomSlider />
+├── <TimelineScrollbar />
+├── <PhaseDetailPanel /> (conditional)
+├── <EventDetailPanel /> (conditional)
+├── <SelectedTimelineDetailsPanel /> (conditional)
+└── <Footer />
+```
+
+---
+
+## 🔄 4. **Component Behavior**
+
+| Component                               | Behavior                                             |
+| --------------------------------------- | ---------------------------------------------------- |
+| `SearchBar`                             | Filters timelines by title/keywords                  |
+| `CategoryFilter`, `ContradictionFilter` | Updates visible rows                                 |
+| `ZoomSelector`                          | Changes timeline granularity (Year ⇄ Decade ⇄ Phase) |
+| `TimelineTrack`                         | Scrollable horizontally, shows phases and events     |
+| `PhaseBlock`                            | On click → opens `<PhaseDetailPanel>`                |
+| `EventDot`                              | On click → opens `<EventDetailPanel>`                |
+| `SelectedTimelineDetailsPanel`          | Opens on explicit timeline click or zoom-in          |
+| `ZoomSlider`                            | Adjusts time axis scale                              |
+| `TimelineScrollbar`                     | Scrolls all `<TimelineTrack>` in sync                |
+| `LegendItem`                            | Static, color reference                              |
+
+---
+
+## 🔁 5. **Interaction Flows**
+
+1. **Search / Filter / Zoom**
+
+   * User uses top bar → triggers filtering in `<TimelineCanvas>`
+   * Zoom level alters phase granularity (updates `<PhaseBlock>` rendering logic)
+
+2. **Scroll Navigation**
+
+   * Horizontal scroll bar affects all tracks
+   * Zoom slider also scales time axis across all rows
+
+3. **Clicking PhaseBlock**
+
+   * Loads `<PhaseDetailPanel>` with summary, events, structures, struggles
+
+4. **Clicking EventDot**
+
+   * Loads `<EventDetailPanel>` with full metadata, links, motion, scale, etc.
+
+5. **Clicking Timeline Label**
+
+   * Opens `<SelectedTimelineDetailsPanel>` for macro view
+
+---
+
+## 🧠 6. **Key UI Behavior**
+
+| Feature             | Behavior                                          |
+| ------------------- | ------------------------------------------------- |
+| Sticky Top Bar      | Top filters + zoom remain on top as user scrolls  |
+| Synchronized Scroll | All timeline rows scroll together horizontally    |
+| Conditional Panels  | Slide-in on trigger, stacked z-index              |
+| Responsive Grid     | Rows collapse into accordion layout on mobile     |
+| Tooltip on Hover    | EventDot shows headline & year                    |
+| Color-coded Phases  | Indicates status: active/closed/high rupture etc. |
+
+---
+
+## 🎨 7. **Visual Design Guidelines**
+
+| Design Token        | Value                                |
+| ------------------- | ------------------------------------ |
+| Primary Font        | Inter / Roboto (Sans-serif)          |
+| Timeline Row Height | 80–100px                             |
+| EventDot Size       | 8–12px, circular, hover-scale: 1.25x |
+| PhaseBlock Colors   | Per status (theme-light compatible)  |
+| Background          | #F8F9FA (light), #212529 (dark)      |
+| Panel BG            | White (light) / #1E1E1E (dark)       |
+| Accent Color        | #FF6B6B (calls to action)            |
+| Border Radius       | 6px (cards, buttons, panels)         |
+| Padding             | 16px standard grid                   |
+| Icon Set            | Tabler Icons or Bootstrap Icons      |
+
+---
+

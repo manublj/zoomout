@@ -71,39 +71,43 @@ export function validateSheetData(sheetName, formData) {
     throw new Error(`No form configuration found for sheet: ${sheetName}`);
   }
 
+  // Add this if you want to require category for STRUCTURES
+  if (sheetName === 'STRUCTURES' && (!formData.category || !formData.category.trim())) {
+    return { category: 'Category is required' };
+  }
+
   return validateDynamicForm(formConfig, formData);
 }
 
 export function validateTimelineData(formData) {
   const errors = {};
-
   if (!formData.timeline_id?.trim()) errors.timeline_id = 'Timeline ID is required';
   if (!formData.title?.trim()) errors.title = 'Title is required';
   if (!formData.description?.trim()) errors.description = 'Description is required';
+  if (!Array.isArray(formData.linked_phases) || formData.linked_phases.length === 0) errors.linked_phases = 'At least one linked phase is required';
   if (!formData.category?.trim()) errors.category = 'Category is required';
-  if (typeof formData.is_public !== 'boolean') errors.is_public = 'Public status is required';
-
+  if (typeof formData.is_public !== 'boolean') errors.is_public = 'Is Public is required';
+  // linked_grid_rows, contradiction_id, structure_ids, event_ids, period_range, core_theme, flashpoints, status, timeline_type, narrative_ids are optional or handled elsewhere
   return errors;
 }
 
 export function validateTimelineRegistryData(formData) {
   const errors = {};
-
   if (!formData.phase_id?.trim()) errors.phase_id = 'Phase ID is required';
   if (!formData.phase_label?.trim()) errors.phase_label = 'Phase Label is required';
+  if (!formData.date_range) errors.date_range = 'Date Range is required';
   if (!formData.description?.trim()) errors.description = 'Description is required';
-  if (!formData.date_range?.trim()) errors.date_range = 'Date Range is required';
-
+  // temporal_phase, current_phase, cluster_theme, timeline_cluster_title, timeline_ids, anchor_contradiction, linked_struggles, linked_events, structure_ids, linked_entities, narrative_ids, rupture_rating are optional or handled elsewhere
   return errors;
 }
 
 export function validateTimelineGridData(formData) {
   const errors = {};
-
   if (!formData.timeline_grid_id?.trim()) errors.timeline_grid_id = 'Timeline Grid ID is required';
   if (!formData.linked_phase_id?.trim()) errors.linked_phase_id = 'Linked Phase ID is required';
   if (!formData.zoom_level?.trim()) errors.zoom_level = 'Zoom Level is required';
+  if (!formData.linked_item_id?.trim()) errors.linked_item_id = 'Linked Item ID is required';
   if (!formData.label?.trim()) errors.label = 'Label is required';
-
+  // notes, weight, color_tag, contradiction_id, domain, period, key_events, narrative_drift, structure_ids, emergent_forces, suppression_forces are optional or handled elsewhere
   return errors;
 }

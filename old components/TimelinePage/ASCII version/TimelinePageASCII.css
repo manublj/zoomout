@@ -1,0 +1,21 @@
+.timeline-ascii {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.2;
+  white-space: pre;
+  overflow-x: auto;
+  background-color: var(--background);
+  color: var(--foreground);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  margin: 1rem 0;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .timeline-ascii {
+    font-size: 10px;
+    padding: 0.5rem;
+  }
+} 

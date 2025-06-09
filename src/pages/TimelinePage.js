@@ -1,125 +1,268 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Spinner, Modal, Button } from 'react-bootstrap';
-import { getTimelines } from '../api/googleSheetsApi';
-import TimelineEventCard from '../components/pages/timeline/TimelineEventCard';
-import TimelineFilters from '../components/pages/timeline/TimelineFilters';
-import TimelineThreadConnector from '../components/pages/timeline/TimelineThreadConnector';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { getTimelines, getContradictions, getStructures, getStruggles } from '../api/googleSheetsApi';
+import ContradictionSummaryBox from '../components/pages/timeline/ContradictionSummaryBox';
+import TimelineCanvas from '../components/pages/timeline/TimelineCanvas';
+import TimelineRow from '../components/pages/timeline/TimelineRow';
+import FilterPanel from '../components/pages/timeline/FilterPanel';
+import LegendBox from '../components/pages/timeline/LegendBox';
+import EventOverlayModal from '../components/pages/timeline/EventOverlayModal';
+import PhaseInfoPanel from '../components/pages/timeline/PhaseInfoPanel';
 import './TimelinePage.css';
 
 const TimelinePage = () => {
-  const [events, setEvents] = useState([]);
-  const [filters, setFilters] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [timelines, setTimelines] = useState([]);
+  const [contradictions, setContradictions] = useState([]);
+  const [structures, setStructures] = useState([]);
+  const [struggles, setStruggles] = useState([]);
+  const [filters, setFilters] = useState({
+    searchText: '',
+    category: 'all',
+    contradiction: 'all',
+    zoomLevel: 'phase' // 'year', 'decade', 'phase'
+  });
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [showEventDetail, setShowEventDetail] = useState(false);
-  const [zoomLevel, setZoomLevel] = useState(1); // Default zoom level
+  const [selectedPhase, setSelectedPhase] = useState(null);
+  const [selectedTimeline, setSelectedTimeline] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [showLegend, setShowLegend] = useState(true);
 
-  // Fetch timeline data
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
+    const loadData = async () => {
       try {
-        const data = await getTimelines(filters);
-        console.log('Fetched timeline events:', data); // Debug log
-        setEvents(data);
+        console.log('Starting to load data...');
+        const [timelinesData, contradictionsData, structuresData, strugglesData] = await Promise.all([
+          getTimelines(filters),
+          getContradictions(),
+          getStructures(),
+          getStruggles()
+        ]);
+
+        console.log('Timelines data received:', timelinesData);
+        console.log('Contradictions data received:', contradictionsData);
+        console.log('Structures data received:', structuresData);
+        console.log('Struggles data received:', strugglesData);
+
+        setTimelines(timelinesData);
+        setContradictions(contradictionsData);
+        setStructures(structuresData);
+        setStruggles(strugglesData);
       } catch (error) {
-        console.error('Error fetching timeline data:', error);
+        console.error('Error loading data:', error);
+        console.error('Error details:', {
+          message: error.message,
+          stack: error.stack,
+          name: error.name
+        });
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
-    fetchData();
+    loadData();
   }, [filters]);
 
-  // Handle filter updates
   const handleFilterChange = (newFilters) => {
-    setFilters(newFilters);
+    setFilters(prev => ({ ...prev, ...newFilters }));
   };
 
-  // Handle event click
   const handleEventClick = (event) => {
     setSelectedEvent(event);
-    setShowEventDetail(true);
+    setShowEventModal(true);
+    setSelectedPhase(null);
   };
 
-  // Close event detail modal
-  const handleCloseEventDetail = () => {
+  const handlePhaseClick = (phase) => {
+    setSelectedPhase(phase);
     setSelectedEvent(null);
-    setShowEventDetail(false);
   };
 
-  // Handle zoom in/out
-  const handleZoomIn = () => {
-    setZoomLevel((prevZoom) => Math.min(prevZoom + 1, 5)); // Max zoom level is 5
+  const handleTimelineSelect = (timeline) => {
+    setSelectedTimeline(timeline);
   };
 
-  const handleZoomOut = () => {
-    setZoomLevel((prevZoom) => Math.max(prevZoom - 1, 1)); // Min zoom level is 1
+  const handleCloseEventModal = () => {
+    setShowEventModal(false);
+    setSelectedEvent(null);
   };
+
+  const handleClosePhasePanel = () => {
+    setSelectedPhase(null);
+  };
+
+  const handleCloseTimelineDetails = () => {
+    setSelectedTimeline(null);
+  };
+
+  const handleToggleLegend = () => {
+    setShowLegend(prev => !prev);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="loading-spinner">
+        <div className="animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
-    <Container fluid className="timeline-page">
-      {/* Header Section */}
+    <div className="timeline-page">
+      {/* Header / Title Block */}
       <header className="timeline-header">
-        <h1>Timeline</h1>
-        <p>
-          Explore the chronological flow of historical motion through events, contradictions, and struggles.
-        </p>
-        <div className="timeline-controls">
-          <Button variant="outline-primary" onClick={handleZoomOut} disabled={zoomLevel === 1}>
-            Zoom Out
-          </Button>
-          <Button variant="outline-primary" onClick={handleZoomIn} disabled={zoomLevel === 5}>
-            Zoom In
-          </Button>
-        </div>
+        <h1>Timeline Master View</h1>
+        <p>Explore and analyze political timelines through a dialectical lens</p>
       </header>
 
-      {/* Filters Section */}
-      <TimelineFilters filters={filters} onFilterChange={handleFilterChange} />
+      {/* Top Controls Bar */}
+      <section className="timeline-controls">
+        <FilterPanel 
+          filters={filters}
+          onFilterChange={handleFilterChange}
+          contradictions={contradictions}
+        />
+      </section>
 
-      {/* Main Timeline Section */}
-      <main className="timeline-main">
-        {loading ? (
-          <div className="text-center my-5">
-            <Spinner animation="border" role="status">
-              <span className="visually-hidden">Loading timeline data...</span>
-            </Spinner>
+      {/* Legend / Color Key */}
+      <CSSTransition
+        in={showLegend}
+        timeout={300}
+        classNames="fade"
+        unmountOnExit
+      >
+        <section className="timeline-legend">
+          <div className="legend-header">
+            <h3>Timeline Legend</h3>
+            <button 
+              className="btn btn-icon"
+              onClick={handleToggleLegend}
+            >
+              {showLegend ? "−" : "+"}
+            </button>
           </div>
-        ) : events.length === 0 ? (
-          <p className="text-center">No events match these filters yet.</p>
-        ) : (
-          <div className={`timeline-view zoom-level-${zoomLevel}`}>
-            {events.map((event, index) => (
-              <React.Fragment key={event.timeline_id}>
-                <TimelineEventCard event={event} onClick={() => handleEventClick(event)} />
-                {index < events.length - 1 && <TimelineThreadConnector />}
-              </React.Fragment>
-            ))}
-          </div>
-        )}
-      </main>
+          <LegendBox />
+        </section>
+      </CSSTransition>
+
+      {/* Core Contradiction Summary */}
+      <CSSTransition
+        in={!!filters.contradiction && filters.contradiction !== 'all'}
+        timeout={300}
+        classNames="fade"
+        unmountOnExit
+      >
+        <section className="contradiction-summary">
+          <ContradictionSummaryBox 
+            contradictions={contradictions}
+            selectedContradiction={filters.contradiction}
+          />
+        </section>
+      </CSSTransition>
+
+      {/* Timeline Canvas Section */}
+      <section className="timeline-main">
+        <TimelineCanvas 
+          zoomLevel={filters.zoomLevel}
+          onZoomChange={(level) => handleFilterChange({ zoomLevel: level })}
+          startYear={1900}
+          endYear={2025}
+        >
+          {timelines.map(timeline => (
+            <TimelineRow
+              key={timeline.id}
+              timeline={timeline}
+              onEventClick={handleEventClick}
+              onPhaseClick={handlePhaseClick}
+              onSelect={handleTimelineSelect}
+              zoomLevel={filters.zoomLevel}
+              isSelected={selectedTimeline?.id === timeline.id}
+            />
+          ))}
+        </TimelineCanvas>
+      </section>
+
+      {/* Phase Info Panel */}
+      <CSSTransition
+        in={!!selectedPhase}
+        timeout={300}
+        classNames="slide"
+        unmountOnExit
+      >
+        <aside className="phase-info-sidebar">
+          {selectedPhase && (
+            <PhaseInfoPanel
+              phase={selectedPhase}
+              structures={structures}
+              contradictions={contradictions}
+              struggles={struggles}
+              onClose={handleClosePhasePanel}
+            />
+          )}
+        </aside>
+      </CSSTransition>
+
+      {/* Selected Timeline Details Panel */}
+      <CSSTransition
+        in={!!selectedTimeline}
+        timeout={300}
+        classNames="fade"
+        unmountOnExit
+      >
+        <div className="timeline-details">
+          {selectedTimeline && (
+            <div className="timeline-details-content">
+              <div className="timeline-details-header">
+                <h3>{selectedTimeline.title}</h3>
+                <button 
+                  className="btn btn-icon"
+                  onClick={handleCloseTimelineDetails}
+                >
+                  ×
+                </button>
+              </div>
+              <p>{selectedTimeline.description}</p>
+              <div className="timeline-details-actions">
+                <button className="btn btn-primary">View Full Timeline</button>
+                <button className="btn btn-secondary">Export Timeline</button>
+                <button className="btn btn-outline">Add Event</button>
+              </div>
+            </div>
+          )}
+        </div>
+      </CSSTransition>
 
       {/* Event Detail Modal */}
-      <Modal show={showEventDetail} onHide={handleCloseEventDetail} size="lg" centered>
-        <Modal.Header closeButton>
-          <Modal.Title>{selectedEvent?.title}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {selectedEvent && (
-            <>
-              <p><strong>Description:</strong> {selectedEvent.description}</p>
-              <p><strong>Linked Phases:</strong> {selectedEvent.linked_phases.map((phase) => phase.phase_label).join(', ')}</p>
-              <p><strong>Linked Grid Rows:</strong> {selectedEvent.linked_grid_rows.map((row) => row.label).join(', ')}</p>
-              <p><strong>Contradictions:</strong> {selectedEvent.registry?.contradictions?.join(', ')}</p>
-              <p><strong>Struggles:</strong> {selectedEvent.registry?.struggles?.join(', ')}</p>
-              <p><strong>Entities:</strong> {selectedEvent.grid?.entities?.join(', ')}</p>
-            </>
+      <CSSTransition
+        in={showEventModal}
+        timeout={300}
+        classNames="fade"
+        unmountOnExit
+      >
+        <div className="modal-overlay">
+          {showEventModal && selectedEvent && (
+            <EventOverlayModal
+              event={selectedEvent}
+              structures={structures}
+              contradictions={contradictions}
+              struggles={struggles}
+              onClose={handleCloseEventModal}
+            />
           )}
-        </Modal.Body>
-      </Modal>
-    </Container>
+        </div>
+      </CSSTransition>
+
+      {/* Footer */}
+      <footer className="timeline-footer">
+        <p>© 2024 Zoomout Project — Dialectical Political Timelines</p>
+        <button 
+          className="about-link"
+          onClick={() => {/* Show about modal */}}
+        >
+          About this Tool
+        </button>
+      </footer>
+    </div>
   );
 };
 

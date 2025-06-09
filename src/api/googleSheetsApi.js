@@ -33,9 +33,11 @@ const logAPICall = async (operation, sheetName, data) => {
 
 export const SHEET_NAMES = {
   ENTITIES: 'ENTITIES',
-  EVENTS: 'EVENTS',  // Changed from REPORTING to EVENTS
+  EVENTS: 'EVENTS',
   THEORY: 'THEORY',
   TIMELINES: 'TIMELINES',
+  TIMELINE_REGISTRY: 'TIMELINE_REGISTRY',
+  TIMELINE_GRID: 'TIMELINE_GRID'
 };
 
 const SPREADSHEET_ID = process.env.REACT_APP_GOOGLE_SHEETS_ID;
@@ -138,33 +140,46 @@ export async function addRowToSheet(sheetName, formData) {
   return Promise.resolve({ success: true });
 }
 
-export const getSheetData = async (sheetName) => {
+// Function to fetch data from a specific Google Sheet
+export const fetchSheetData = async (sheetName) => {
   try {
-    logDebug('Fetching sheet data', { sheetName });
-    
+    console.log(`Fetching data from sheet: ${sheetName}`);
     await initializeAuth();
     const sheet = doc.sheetsByTitle[sheetName];
-    
     if (!sheet) {
-      throw new Error(`Sheet "${sheetName}" not found`);
+      console.error(`Sheet "${sheetName}" not found in spreadsheet`);
+      throw new Error(`Sheet with name "${sheetName}" not found`);
     }
 
-    const rows = await logAPICall(
-      'getRows',
-      sheetName,
-      sheet.getRows()
-    );
+    console.log(`Found sheet "${sheetName}", getting rows...`);
+    const rows = await sheet.getRows();
+    console.log(`Retrieved ${rows.length} rows from sheet "${sheetName}"`);
     
-    const transformedData = rows.map(row => {
+    const processedRows = rows.map(row => {
       const rowData = {};
-      SHEET_CONFIG[sheetName].displayOrder.forEach(fieldName => {
-        rowData[fieldName] = row[fieldName];
+      Object.keys(row).forEach(key => {
+        if (key !== '_rawData' && key !== '_sheet' && key !== '_rowNumber') {
+          rowData[key] = row[key];
+        }
       });
       return rowData;
     });
+    
+    console.log(`Processed ${processedRows.length} rows from sheet "${sheetName}"`);
+    return processedRows;
+  } catch (error) {
+    console.error(`Error fetching data from sheet "${sheetName}":`, error);
+    throw error;
+  }
+};
 
-    logDebug('Sheet data fetched', { rowCount: transformedData.length });
-    return transformedData;
+// Update getSheetData to use fetchSheetData
+export const getSheetData = async (sheetName) => {
+  try {
+    logDebug('Fetching sheet data', { sheetName });
+    const data = await fetchSheetData(sheetName);
+    logDebug('Sheet data fetched', { rowCount: data.length });
+    return data;
   } catch (error) {
     console.error('getSheetData Error:', error);
     logDebug('Failed to fetch sheet data', { error });
@@ -228,8 +243,37 @@ export const addStruggle = async (struggleData) => {
 };
 
 export const getStruggles = async () => {
-    const response = await fetch("/api/struggles");
-    return response.json();
+  try {
+    const rows = await fetchSheetData('STRUGGLES');
+    return rows.map(row => ({
+      id: row.struggle_id,
+      name: row.struggle_name,
+      type: row.struggle_type,
+      subtype: row.subtype,
+      description: row.struggle_description,
+      active_range: row.active_range,
+      parent_structure: row.parent_structure,
+      primary_terrain: row.primary_terrain,
+      root_contradiction: row.root_contradiction,
+      linked_contradictions: row.linked_contradictions ? row.linked_contradictions.split(',').map(id => id.trim()) : [],
+      linked_structures: row.linked_structures ? row.linked_structures.split(',').map(id => id.trim()) : [],
+      linked_entities: row.linked_entities ? row.linked_entities.split(',').map(id => id.trim()) : [],
+      linked_events: row.linked_events ? row.linked_events.split(',').map(id => id.trim()) : [],
+      linked_issues: row.linked_issues ? row.linked_issues.split(',').map(id => id.trim()) : [],
+      flashpoints: row.flashpoints ? row.flashpoints.split(',').map(id => id.trim()) : [],
+      form: row.form,
+      scale: row.scale,
+      sector: row.sector,
+      historical_development: row.historical_development,
+      period: row.period,
+      current_status: row.current_status,
+      outcome: row.outcome,
+      narratives_shaping: row.narratives_shaping_struggle ? row.narratives_shaping_struggle.split(',').map(id => id.trim()) : []
+    }));
+  } catch (error) {
+    console.error('Error fetching struggles:', error);
+    throw error;
+  }
 };
 
 export const updateStruggle = async (struggleId, updatedData) => {
@@ -258,8 +302,39 @@ export const addContradiction = async (contradictionData) => {
 };
 
 export const getContradictions = async () => {
-    const response = await fetch("/api/contradictions");
-    return response.json();
+  try {
+    const rows = await fetchSheetData('CONTRADICTIONS');
+    return rows.map(row => ({
+      id: row.contradiction_id,
+      name: row.contradiction_name,
+      cluster: row.contradiction_cluster,
+      type: row.contradiction_type,
+      subtype: row.subtype,
+      primary_domain: row.primary_domain,
+      root_structure: row.root_structure,
+      category_of_root_structure: row.category_of_root_structure,
+      dominant_side: row.dominant_side,
+      dominated_side: row.dominated_side,
+      description: row.contradiction_description,
+      rupture_date: row.rupture_date,
+      first_major_flashpoint_event_id: row.first_major_flashpoint_event_id,
+      timeline_ids: row.timeline_ids ? row.timeline_ids.split(',').map(id => id.trim()) : [],
+      timeline_registry_ids: row.timeline_registry_ids ? row.timeline_registry_ids.split(',').map(id => id.trim()) : [],
+      struggle_ids: row.struggle_ids ? row.struggle_ids.split(',').map(id => id.trim()) : [],
+      linked_issues: row.linked_issues ? row.linked_issues.split(',').map(id => id.trim()) : [],
+      entity_ids: row.entity_ids ? row.entity_ids.split(',').map(id => id.trim()) : [],
+      intensity: row.contradiction_intensity,
+      priority: row.contradiction_priority,
+      historical_motion: row.historical_motion,
+      status: row.status,
+      theory_ids: row.theory_ids ? row.theory_ids.split(',').map(id => id.trim()) : [],
+      timeline_relevance: row.timeline_relevance ? row.timeline_relevance.split(',').map(id => id.trim()) : [],
+      narratives_highlighted: row.narratives_highlighted_by_contradiction ? row.narratives_highlighted_by_contradiction.split(',').map(id => id.trim()) : []
+    }));
+  } catch (error) {
+    console.error('Error fetching contradictions:', error);
+    throw error;
+  }
 };
 
 export const updateContradiction = async (contradictionId, updatedData) => {
@@ -279,37 +354,38 @@ export const deleteContradiction = async (contradictionId) => {
 };
 
 export const addTimeline = async (timelineData) => {
-  const formConfig = formConfigs.TIMELINES;
-  if (!formConfig) {
-    throw new Error('No form configuration found for TIMELINES');
-  }
-
-  const payload = {};
-  for (const [fieldName, fieldConfig] of Object.entries(formConfig.fields)) {
-    if (fieldConfig.visible !== false && !fieldConfig.autoGenerated) {
-      payload[fieldName] = timelineData[fieldName] || '';
-    }
-  }
-
-  logDebug('Submitting TIMELINES data:', payload);
-  return Promise.resolve({ success: true }); // Replace with actual API call
-}
-
-// Function to fetch data from a specific Google Sheet
-export const fetchSheetData = async (sheetName) => {
   try {
     await initializeAuth();
-    const sheet = doc.sheetsByTitle[sheetName];
+    const sheet = doc.sheetsByTitle['TIMELINES'];
     if (!sheet) {
-      throw new Error(`Sheet with name "${sheetName}" not found`);
+      throw new Error('TIMELINES sheet not found');
     }
 
-    const rows = await sheet.getRows();
-    const data = rows.map((row) => row._rawData); // Extract raw data from rows
-    console.log(`Data from sheet "${sheetName}":`, data); // Debug log
-    return data;
+    // Prepare the row data
+    const rowData = {
+      timeline_id: timelineData.id || uuidv4(),
+      title: timelineData.title,
+      description: timelineData.description,
+      category: timelineData.category,
+      is_public: timelineData.is_public ? 'TRUE' : 'FALSE',
+      contradiction_id: timelineData.contradiction_id,
+      structure_ids: timelineData.structure_ids?.join(',') || '',
+      event_ids: timelineData.event_ids?.join(',') || '',
+      period_range: timelineData.period_range,
+      core_theme: timelineData.core_theme,
+      flashpoints: timelineData.flashpoints?.join(',') || '',
+      status: timelineData.status,
+      timeline_type: timelineData.timeline_type,
+      narrative_ids: timelineData.narrative_ids?.join(',') || '',
+      linked_phases: timelineData.linked_phases?.map(phase => phase.id).join(',') || '',
+      linked_grid_rows: timelineData.linked_grid_rows?.map(row => row.id).join(',') || ''
+    };
+
+    // Add the row to the sheet
+    await sheet.addRow(rowData);
+    return { success: true, id: rowData.timeline_id };
   } catch (error) {
-    console.error(`Error fetching data from sheet "${sheetName}":`, error);
+    console.error('Error adding timeline:', error);
     throw error;
   }
 };
@@ -317,35 +393,103 @@ export const fetchSheetData = async (sheetName) => {
 // Function to fetch and process timeline data
 export const getTimelines = async (filters) => {
   try {
-    console.log('Fetching timeline data with filters:', filters); // Debug log
-    const timelines = await fetchSheetData('TIMELINES');
-    const registry = await fetchSheetData('TIMELINE_REGISTRY_SHEET');
-    const grid = await fetchSheetData('TIMELINE_GRID_SHEET');
+    console.log('Fetching timeline data with filters:', filters);
+    
+    // Log the initialization status
+    console.log('Auth initialized:', isInitialized);
+    
+    // Log the spreadsheet info
+    console.log('Spreadsheet ID:', SPREADSHEET_ID);
+    
+    const [timelines, registry] = await Promise.all([
+      fetchSheetData('TIMELINES'),
+      fetchSheetData('TIMELINE_REGISTRY')
+    ]);
 
-    // Merge and process data
-    const mergedData = timelines.map((timeline) => {
-      const linkedPhases = timeline[3]?.split(',').map((phaseId) =>
-        registry.find((entry) => entry[0] === phaseId)
-      );
-      const linkedGridRows = timeline[4]?.split(',').map((gridId) =>
-        grid.find((entry) => entry[0] === gridId)
-      );
+    console.log('Raw timelines data:', timelines);
+    console.log('Raw registry data:', registry);
 
-      return {
-        timeline_id: timeline[0],
-        title: timeline[1],
-        description: timeline[2],
-        linked_phases: linkedPhases || [],
-        linked_grid_rows: linkedGridRows || [],
-        category: timeline[5],
-        is_public: timeline[6] === 'TRUE',
+    // Map rows to ensure correct field names and types
+    const processedTimelines = timelines.map(timeline => {
+      console.log('Processing timeline:', timeline);
+      
+      // Process linked phases
+      const linkedPhases = timeline.linked_phases ? 
+        timeline.linked_phases.split(',').map(phaseId => {
+          const phase = registry.find(entry => entry.phase_id === phaseId.trim());
+          if (!phase) {
+            console.log('Phase not found for ID:', phaseId);
+            return null;
+          }
+          return {
+            id: phase.phase_id,
+            label: phase.phase_label,
+            date_range: phase.date_range,
+            description: phase.description,
+            rupture_rating: parseInt(phase.rupture_rating) || 0,
+            linked_events: phase.linked_events ? phase.linked_events.split(',').map(id => id.trim()) : [],
+            linked_struggles: phase.linked_struggles ? phase.linked_struggles.split(',').map(id => id.trim()) : [],
+            structure_ids: phase.structure_ids ? phase.structure_ids.split(',').map(id => id.trim()) : []
+          };
+        }).filter(Boolean) : [];
+
+      const processedTimeline = {
+        id: timeline.timeline_id,
+        title: timeline.title,
+        description: timeline.description,
+        category: timeline.category,
+        is_public: timeline.is_public === 'TRUE',
+        contradiction_id: timeline.contradiction_id,
+        structure_ids: timeline.structure_ids ? timeline.structure_ids.split(',').map(id => id.trim()) : [],
+        event_ids: timeline.event_ids ? timeline.event_ids.split(',').map(id => id.trim()) : [],
+        period_range: timeline.period_range,
+        core_theme: timeline.core_theme,
+        flashpoints: timeline.flashpoints ? timeline.flashpoints.split(',').map(id => id.trim()) : [],
+        status: timeline.status,
+        timeline_type: timeline.timeline_type,
+        narrative_ids: timeline.narrative_ids ? timeline.narrative_ids.split(',').map(id => id.trim()) : [],
+        linked_phases: linkedPhases
       };
+      
+      console.log('Processed timeline:', processedTimeline);
+      return processedTimeline;
     });
 
-    console.log('Merged timeline data:', mergedData); // Debug log
-    return mergedData;
+    console.log('Timelines before filtering:', processedTimelines);
+    console.log('Current filters:', filters);
+
+    // Apply filters if provided
+    let filteredTimelines = processedTimelines;
+    if (filters) {
+      console.log('Applying filters:', filters);
+      if (filters.search && filters.search.trim() !== '') {
+        const searchLower = filters.search.toLowerCase();
+        filteredTimelines = filteredTimelines.filter(timeline => 
+          timeline.title.toLowerCase().includes(searchLower) ||
+          timeline.description.toLowerCase().includes(searchLower)
+        );
+      }
+      if (filters.contradiction && filters.contradiction !== 'all') {
+        filteredTimelines = filteredTimelines.filter(timeline => 
+          timeline.contradiction_id === filters.contradiction
+        );
+      }
+      if (filters.category && filters.category !== 'all') {
+        filteredTimelines = filteredTimelines.filter(timeline => 
+          timeline.category === filters.category
+        );
+      }
+    }
+
+    console.log('Final filtered timelines:', filteredTimelines);
+    return filteredTimelines;
   } catch (error) {
     console.error('Error fetching timeline data:', error);
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
     throw error;
   }
 };
@@ -376,8 +520,33 @@ export const addStructure = async (structureData) => {
 };
 
 export const getStructures = async () => {
-    const response = await fetch("/api/structures");
-    return response.json();
+  try {
+    const rows = await fetchSheetData('STRUCTURES');
+    return rows.map(row => ({
+      id: row.structure_id,
+      name: row.structure_name,
+      type: row.structure_type,
+      region: row.region,
+      parent_structure: row.parent_structure,
+      category: row.category,
+      lifespan: row.lifespan,
+      transformation_status: row.transformation_status,
+      subtype: row.subtype ? row.subtype.split(',').map(s => s.trim()) : [],
+      timeline_registry_ids: row.timeline_registry_ids ? row.timeline_registry_ids.split(',').map(id => id.trim()) : [],
+      description: row.structure_description,
+      historical_range: row.historical_range,
+      structure_evolution: row.structure_evolution,
+      embedded_contradictions: row.embedded_contradictions ? row.embedded_contradictions.split(',').map(id => id.trim()) : [],
+      linked_struggles: row.linked_struggles ? row.linked_struggles.split(',').map(id => id.trim()) : [],
+      issue_ids: row.issue_ids ? row.issue_ids.split(',').map(id => id.trim()) : [],
+      linked_entities: row.linked_entities ? row.linked_entities.split(',').map(id => id.trim()) : [],
+      confidence: parseInt(row.confidence) || 0,
+      narratives_shaped_by_structure: row.narratives_shaped_by_structure ? row.narratives_shaped_by_structure.split(',').map(id => id.trim()) : []
+    }));
+  } catch (error) {
+    console.error('Error fetching structures:', error);
+    throw error;
+  }
 };
 
 export const updateStructure = async (structureId, updatedData) => {
@@ -444,18 +613,6 @@ export async function fetchLinkedSheetData(sheetName) {
 
 export async function getTimelineRegistry() {
   return getSheetData('TIMELINE_REGISTRY');
-}
-
-export async function getTimelineGrid() {
-  return getSheetData('TIMELINE_GRID');
-}
-
-export async function addTimelineRegistry(registryData) {
-  return addRowToSheet('TIMELINE_REGISTRY', registryData);
-}
-
-export async function addTimelineGrid(gridData) {
-  return addRowToSheet('TIMELINE_GRID', gridData);
 }
 
 const EntitiesForm = ({ show, onHide, onSubmit }) => {

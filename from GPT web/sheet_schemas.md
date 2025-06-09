@@ -1,258 +1,278 @@
-## 🔹 1. Events Sheet
+## 🔹 1.1 Timelines Sheet
 
 | Field | Type | Description |
-| --- | --- | --- |
-| `event_id` | String | Unique identifier for the event. |
-| `event_title` | String | One-line title summarizing the event. |
-| `multi_headline_view` | Long Text | Multiple ideological framings or headlines that appeared in media or discourse. |
-| `date` | Date | Actual date of occurrence. |
-| `reporting_date` | Date | Date the event was documented or covered. |
-| `location` | String | Place where the event took place. |
-| `platform` | String | Platform where the source was published (e.g., EPW, Twitter). |
-| `src_type` | Dropdown | Type of source: Testimonial / Archival / Investigative / Official. |
-| `source_link` | URL | Direct link to the reporting source. |
-| `description` | Long Text | Factual and analytical summary of the event. |
-| `item_category` | Dropdown | Category type (should default to 'event'). |
-| `event_type_tag` | Tag | Optional tag for filtering events by type (e.g., Protest, Policy Shift). |
-| `contradiction_id` | Linked Field | Links this event to the contradiction it ruptures. |
-| `issue_ids` | Linked Field | Issues that surfaced or were sharpened by this event. |
-| `entity_ids` | Linked Field | Entities involved in or affected by the event. |
-| `struggle_id` | Linked Field | Struggle that this event contributes to. |
-| `event_motion` | Dropdown | Indicates whether the contradiction was Sharpened / Neutralized / Transformed. |
-| `event_relevance` | Dropdown | Indicates whether the event has Long-Term or Short-Term implications. |
-| `macro_micro` | Dropdown | Classifies whether the event is a macro structural rupture or micro-level incident. |
-| `historical_flag` | Boolean | Marks the event as historically validated. |
-| `timeline_id` | Linked Field | Optional link to an overarching event-timeline arc. |
+|-------|------|-------------|
+| timeline_id | String | Unique identifier for the timeline. |
+| title | String | Name of the timeline arc. |
+| description | Long Text | Overview including thematic or historical scope. |
+| linked_phases | Linked Field | List of phase_ids from Timeline Registry. |
+| linked_grid_rows | Auto-Generated | Pulled from linked_phase_id entries in Timeline Grid Sheet. |
+| category | Dropdown | e.g., historical_arc, thematic_sequence. |
+| is_public | Boolean | Visibility in frontend. |
+| contradiction_id | Linked Field | Contradiction this timeline belongs to. |
+| structure_ids | Linked Field | Base/superstructural systems involved. |
+| event_ids | Linked Field | All events in the timeline. |
+| period_range | Date Range | Time span of the timeline. |
+| core_theme | Dropdown | Central theme or question. |
+| flashpoints | Linked Field | Key turning points (events). |
+| status | Dropdown | Active, closed, evolving. |
+| timeline_type | Dropdown | e.g., Legislative Timeline, Protest Timeline. |
+| narrative_ids | Linked Field | Narratives generated or split. |
+
+## 🔹 1.2 Timeline Registry Sheet
+
+| Field | Type | Description |
+|-------|------|-------------|
+| phase_id | String | Unique ID. |
+| phase_label | String | Title of the phase. |
+| date_range | Date Range | Start and end. |
+| temporal_phase | Date Range | Time period or era. |
+| current_phase | Boolean | Whether active. |
+| description | Long Text | Defines phase's contradictions and context. |
+| cluster_theme | Dropdown | Central idea captured. |
+| timeline_cluster_title | String | Narrative-level cluster name. |
+| timeline_ids | Linked Field | All timelines in this cluster. |
+| anchor_contradiction | Linked Field | Central contradiction. |
+| linked_struggles | Linked Field | Core struggles. |
+| linked_events | Linked Field | Key events. |
+| structure_ids | Linked Field | Affected structures. |
+| linked_entities | Linked Field | Key actors. |
+| narrative_ids | Linked Field | Narratives emerging. |
+| rupture_rating | Dropdown | High, Medium, Low. |
+
+## 🔹 1.3 Timeline Grid Sheet
+
+| Field | Type | Description |
+|-------|------|-------------|
+| timeline_grid_id | String | Unique block ID. |
+| linked_phase_id | Linked Field | Phase this belongs to. |
+| zoom_level | Dropdown | Event / Issue / Struggle / Contradiction. |
+| linked_item_id | Linked Field | The zoom-level element. |
+| label | String | Display name. |
+| notes | Long Text | Internal notes. |
+| weight | Integer | Rendering priority. |
+| color_tag | Tag | Color mapping. |
+| contradiction_id | Linked Field | Linked contradiction. |
+| domain | Dropdown | e.g., Education, Judiciary. |
+| period | Date Range | Time block. |
+| key_events | Linked Field | Major events. |
+| narrative_drift | Linked Field | Narrative changes. |
+| structure_ids | Linked Field | Structural shifts. |
+| emergent_forces | Linked Field | New forces. |
+| suppression_forces | Linked Field | Co-opting or pushback forces. |
+
+- 🔹 2. Structures Sheet
+    
+    
+    | Field | Type | Notes |
+    | --- | --- | --- |
+    | `structure_id` | String | Unique identifier. |
+    | `structure_name` | String | Name of the structure (e.g., Indian Bureaucracy). |
+    | `region` | Dropdown (Single Select) | states in India (ex. Tamil Nadu, Kerala, Karnataka .etc) |
+    | `parent_structure` | Dropdown (Single Select) | ‘subtype’ field from master taxonomy tables |
+    | `category` | Dropdown (Single Select) | Economic / Political / Social / Cultural  |
+    | `lifespan` | Dropdown (Single Select) | Ancient / Colonial / Post-Independence / Ongoing |
+    | `transformation_status` | Dropdown (Single Select) | Active / Transforming / Dormant |
+    | `structure_type` | Dropdown (Single Select) | Tells you the *macro-zone* (economic, social, political, etc.) — values: `Base`, `Social Superstructure`, `Political Superstructure`, `Legal-Judicial Superstructure`, `Religious Superstructure`, `Informational Superstructure`.  (Instead of current messy `structure_type`.) |
+    | `subtype` | Multi-Select Dropdown | Tell you the *broad themes*. — choose multiple: `Caste`, `Capital`, `Labor`, `Land`, `Welfare`, `Law`, `Religion`, `Patriarchy / Gender`, `Bureaucracy`, `Surveillance / Tech`, `Education`, `Media / Narrative`, `Federalism`, `Environment / Extraction`. |
+    | `timeline_registry_ids` | Linked Field | Llinking structures to timeline_registry lets you trace their motion across contradictions and historical periods. |
+    | `structure_description` | Long Text | Structural function and history. |
+    | `historical_range` | Date Range | Period it was active. |
+    | `structure_evolution` | Long Text | How structure evolved over time |
+    | `embedded_contradictions` | Linked Field | Contradictions that emerge from this structure. |
+    | `linked_struggles` | Linked Field | Struggles shaped by or against this structure. |
+    | `issue_ids` | Linked Field | Linking to issues exposes what contradictions arise within the structure. |
+    | `linked_entities` | Linked Field | Entities upholding or opposing this structure. |
+    | `structure_evolution` | Long Text | How it changed, resisted change, or got reformed. |
+    | `confidence` | Dropdown | High / Medium / Low + source context. |
+    | `narrative(s)_shaped_by_structure` | Linked Field | Captures how particular structures (e.g., economic, political, social) shape or reinforce certain narratives. This can track the interplay between macro-level structures and narratives. |
+
+## 🔹 3. Contradictions Sheet
+
+| Field | Type | Description |
+|-------|------|-------------|
+| contradiction_id | String | Unique ID. |
+| contradiction_name | String | Name or shorthand. |
+| contradiction_cluster | Dropdown | e.g., Capital vs Labor. |
+| contradiction_type | Dropdown | Ideological / Material / Political. |
+| subtype | Dropdown | Optional refinement. |
+| primary_domain | Dropdown | Societal sector. |
+| root_structure | Linked Field | Origin structure. |
+| category_of_root_structure | Dropdown | Structure type. |
+| dominant_side | Linked Field | Dominant actor. |
+| dominated_side | Linked Field | Dominated actor. |
+| contradiction_description | Long Text | Detailed explanation. |
+| rupture_date | Date | First rupture. |
+| first_major_flashpoint_event_id | Linked Field | Key event. |
+| timeline_ids | Linked Field | Relevant timelines. |
+| timeline_registry_ids | Linked Field | Historical phases. |
+| struggle_ids | Linked Field | Related struggles. |
+| linked_issues | Linked Field | Issues manifesting contradiction. |
+| entity_ids | Linked Field | Enacting entities. |
+| contradiction_intensity | Dropdown | Low / Medium / High. |
+| contradiction_priority | Dropdown | Peripheral / Secondary / Core. |
+| historical_motion | Long Text | Narrative arc. |
+| status | Dropdown | Active / Resolved / Dormant. |
+| theory_ids | Linked Field | Theories involved. |
+| timeline_relevance | Linked Field | Timeline-based relevance. |
+| narrative(s)_highlighted_by_contradiction | Linked Field | Related narratives. |
+
+## 🔹 4. Struggles Sheet
+
+| Field | Type | Description |
+|-------|------|-------------|
+| struggle_id | String | Unique ID. |
+| struggle_name | String | Campaign name. |
+| struggle_type | Dropdown | Electoral, Legal, etc. |
+| subtype | Dropdown | Specific struggle form. |
+| struggle_description | Long Text | Analytical framing. |
+| active_range | Date Range | Active duration. |
+| parent_structure | Linked Field | Parent structural domain. |
+| primary_terrain | Dropdown | Domain (e.g., Caste). |
+| root_contradiction | Linked Field | Related contradiction. |
+| linked_contradictions | Linked Field | Related contradictions. |
+| linked_structures | Linked Field | Involved structures. |
+| linked_entities | Linked Field | Involved actors. |
+| linked_events | Linked Field | Related events. |
+| linked_issues | Linked Field | Issues at stake. |
+| flashpoints | Linked Field | Intense moments. |
+| form | Dropdown | Protest, Litigation, etc. |
+| scale | Dropdown | Local to National. |
+| sector | Dropdown | Land / Law / etc. |
+| historical_development | Long Text | Evolution over time. |
+| period | Date Range | Duration. |
+| current_status | Dropdown | Ongoing / Resolved. |
+| outcome | Long Text | Results. |
+| narrative(s)_shaping_struggle | Linked Field | Shaping narratives. |
+
+## 🔹 5. Events Sheet
+
+| Field | Type | Description |
+|-------|------|-------------|
+| event_id | String | Unique ID. |
+| event_title | String | Summary title. |
+| multi_headline_view | Long Text | Different ideological framings. |
+| date | Date | Date of occurrence. |
+| reporting_date | Date | Coverage date. |
+| location | String | Place. |
+| platform | String | Source platform. |
+| src_type | Dropdown | Source type. |
+| source_link | URL | Link to source. |
+| description | Long Text | Event summary. |
+| item_category | Dropdown | Defaults to 'event'. |
+| event_type_tag | Tag | Type tag (e.g., Protest). |
+| structure_ids | Linked Field | Related structures. |
+| contradiction_id | Linked Field | Linked contradiction. |
+| issue_ids | Linked Field | Related issues. |
+| entity_ids | Linked Field | Involved entities. |
+| struggle_id | Linked Field | Linked struggle. |
+| event_motion | Dropdown | Sharpened / Neutralized. |
+| event_relevance | Dropdown | Long-Term / Short-Term. |
+| macro_micro | Dropdown | Structural or incident-level. |
+| historical_flag | Boolean | Validated historically. |
+| linked_timeline_id | Linked Field | Parent timeline. |
+| narrative(s)_framed_by_event | Linked Field | Ideological framings. |
+
+## 🔹 6. Entities Sheet
+
+| Field | Type | Description |
+|-------|------|-------------|
+| entity_id | String | Unique ID. |
+| entity_name | String | Actor or organization name. |
+| entity_type | Dropdown | e.g., Party, Movement. |
+| bio | Long Text | Brief description. |
+| political_role | Long Text | Relation to contradiction. |
+| ideological_category | Dropdown | e.g., Ambedkarite. |
+| SPECTRUM | Tag | Ideological axis. |
+| entity_stance_role | Dropdown | Agitator / Defender etc. |
+| contradiction_ids | Linked Field | Related contradictions. |
+| struggle_ids | Linked Field | Related struggles. |
+| linked_events | Linked Field | Events involving this entity. |
+| linked_issues | Linked Field | Public stances. |
+| relationship_ids | Linked Field | Links to other entities. |
+| stances_history | Long Text | Ideological evolution. |
+| active_period | Date Range | Active years. |
+
+## 🔹 7. Issues Sheet
+
+| Field | Type | Description |
+|-------|------|-------------|
+| issue_id | String | Unique ID. |
+| issue_title | String | Name of the issue. |
+| issue_event_id | Linked Field | Foundational event. |
+| contradiction_ids | Linked Field | Linked contradictions. |
+| linked_struggles | Linked Field | Relevant struggles. |
+| description | Long Text | Ideological framing. |
+| issue_timeline | Date Range | Visibility period. |
+| issue_status | Dropdown | Developing / Peaking. |
+| stance_1/2/3_headlines | Long Text | Representative headlines. |
+| stance_1/2/3_description | Long Text | Ideological descriptions. |
+| stance_1/2/3_events | Linked Field | Supporting events. |
+| narrative(s)_linked | Linked Field | Shaping narratives. |
+
+## 🔹 8.1 Theory Object Sheet
+
+| Field | Type | Description |
+|-------|------|-------------|
+| theory_object_id | String | Unique ID. |
+| title | String | Name of ideology/concept. |
+| abstract | Long Text | Summary. |
+| proposition | Long Text | Core claim. |
+| theory_object_type | Dropdown | ideological_system, concept, etc. |
+| theory_entry_type | Dropdown | ism, descriptor, identity. |
+| category_origin | Dropdown | caste, capital, gender, etc. |
+| ism_origin_type | Dropdown | For ideological systems. |
+| ism_function | Dropdown | Dominant, Counter. |
+| ideological_motion_status | Dropdown | Emerging, Active, Declining. |
+| primary_domain | Dropdown | Political, Cultural, Legal. |
+| tags | Tag List | Classifiers. |
+| keywords | Tag List | Associated ideas. |
+| contradiction_ids | Linked Field | Engaged contradictions. |
+| event_ids | Linked Field | Validating events. |
+| validation_status | Dropdown | Validated, Contested. |
+| political_spectrum | Dropdown | Ideological category. |
+| author | String | Thinker or movement. |
+| publication_date | Date | When emerged. |
+| key_excerpts | Long Text | Quotes, slogans. |
+| example_terms | Tag List | Aliases or related terms. |
+
+## 🔹 8.2 Theory Instance Sheet
+
+| Field | Type | Description |
+|-------|------|-------------|
+| theory_instance_id | String | Unique ID. |
+| title | String | Label or summary. |
+| origin_type | Dropdown | entity_produced, independent_theory. |
+| origin_entity_id | Linked Field | Producing entity. |
+| author | String | Author or speaker. |
+| publication_date | Date | Release date. |
+| content_object_type | Dropdown | Tweet, Speech, etc. |
+| platform | String | Twitter, YouTube, etc. |
+| src_type | Dropdown | Social Media, Academic. |
+| message_text | Long Text | Transcript or caption. |
+| url | URL | Link to content. |
+| linked_theory_object_ids | Linked Field | Expressed theory. |
+| linked_contradiction_ids | Linked Field | Engaged contradictions. |
+| linked_event_ids | Linked Field | Responsive events. |
+| linked_stance_ids | Linked Field | Positions on issues. |
+| tags | Tag List | Framing keywords. |
+| narrative(s)_represented | Linked Field | Discussed narratives. |
 
 ---
 
-## 🔹 2. Issues Sheet
+## 🔗 10. Sheet Linkage Summary
 
-| Field | Type | Description |
-| --- | --- | --- |
-| `issue_id` | String | Unique identifier for the issue. |
-| `issue_title` | String | Name of the issue. |
-| `issue_event_id` | Linked Field | Foundational event that sparked the issue. |
-| `contradiction_ids` | Linked Field | Contradictions underlying this issue. |
-| `description` | Long Text | Public and ideological framing of the issue. |
-| `issue_timeline` | Date Range | Visibility period of the issue. |
-| `issue_status` | Dropdown | Current status: Developing / Peaking / Resolving. |
-| `stance_1_headlines` | Long Text | Representative headlines of stance 1. |
-| `stance_2_headlines` | Long Text | Representative headlines of stance 2. |
-| `stance_3_headlines` | Long Text | Optional — headlines for a third stance. |
-| `stance_1_description` | Long Text | Description of stance 1 logic and ideological position. |
-| `stance_2_description` | Long Text | Description of stance 2. |
-| `stance_3_description` | Long Text | Optional — third position. |
-| `stance_1_events` | Linked Field | Events that reinforced stance 1. |
-| `stance_2_events` | Linked Field | Events for stance 2. |
-| `stance_3_events` | Linked Field | Events for stance 3. |
-
----
-
-## 🔹 3. Struggles Sheet
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `struggle_id` | String | Unique identifier for the struggle. |
-| `struggle_name` | String | Shorthand title or campaign name. |
-| `root_contradiction` | Linked Field | The contradiction this struggle engages with. |
-| `struggle_description` | Long Text | Analytical framing of the struggle. |
-| `event_ids` | Linked Field | Events associated with this struggle. |
-| `linked_issues` | Linked Field | Issues motivating or shaped by this struggle. |
-| `entity_ids` | Linked Field | Movements, actors, or organizations involved. |
-| `form` | Dropdown | Form of praxis: Protest / Litigation / Cultural etc. |
-| `scale` | Dropdown | Local / Regional / Statewide / National. |
-| `sector` | Dropdown | Sectoral domain: Land / Law / Language etc. |
-| `historical_development` | Long Text | How the struggle evolved over time. |
-| `period` | Date Range | Duration of the struggle. |
-| `current_status` | Dropdown | Ongoing / Dormant / Resolved. |
-| `outcome` | Long Text | What changed as a result. |
-
----
-
-## 🔹 4. Contradictions Sheet
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `contradiction_id` | String | Unique identifier. |
-| `contradiction_name` | String | Name or shorthand (e.g., Dominance vs Autonomy). |
-| `contradiction_type` | Dropdown | Ideological / Material / Political etc. |
-| `subtype` | Dropdown | Optional refinement for filtering or analysis. |
-| `root_structure` | Linked Field | Structure that births this contradiction. |
-| `contradiction_description` | Long Text | Detailed explanation of the contradiction. |
-| `rupture_date` | Date | First historical rupture associated with this contradiction. |
-| `first_major_flashpoint_event_id` | Linked Field | Key event that made this contradiction visible. |
-| `struggle_ids` | Linked Field | Struggles generated by this contradiction. |
-| `linked_issues` | Linked Field | Issues that manifest this contradiction. |
-| `contradiction_intensity` | Dropdown | Low / Medium / High. |
-| `contradiction_priority` | Dropdown | Peripheral / Secondary / Core. |
-| `historical_motion` | Long Text | Narrative arc of contradiction across time. |
-| `status` | Dropdown | Active / Resolved / Dormant. |
-| `theory_ids` | Linked Field | Theoretical frameworks tied to this contradiction. |
-
----
-
-## 🔹 5. Entities Sheet
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `entity_id` | String | Unique ID. |
-| `entity_name` | String | Name of the actor or organization. |
-| `entity_type` | Dropdown | Movement / Party / State Org / Media / NGO etc. |
-| `bio` | Long Text | Brief description of what this entity is. |
-| `political_role` | Long Text | Their position in relation to contradiction. |
-| `ideological_category` | Dropdown | Ambedkarite / Hindutva / ML / Liberal etc. |
-| `SPECTRUM` | Tag | Ideological axis tag. |
-| `entity_stance_role` | Dropdown | Agitator / Defender / Target / Victim etc. |
-| `struggle_ids` | Linked Field | Struggles they’ve contributed to. |
-| `linked_events` | Linked Field | Events involving this entity. |
-| `linked_issues` | Linked Field | Issues they’ve taken public stances on. |
-| `relationship_ids` | Linked Field | Mapped relationships with other entities. |
-| `stances_history` | Long Text | How their ideological role evolved. |
-| `active_period` | Date Range | When they were relevant or active. |
-
----
-
-## 🔹 6.1 — Theory Object Sheet
-
-The Theory Object Sheet stores all **stable ideological structures** — including systems (`ideological_system`), concepts, identity frames, and descriptors that explain or shape contradictions.
-
-These objects are used to:
-
-- Frame contradictions and struggles
-- Explain historical motion
-- Be referenced by content (theory instances), events, or political stances
-
-### **Schema:**
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `theory_object_id` | String | Unique ID |
-| `title` | String | Name of the ideology, concept, or identity |
-| `abstract` | Long Text | Summary of the theory |
-| `proposition` | Long Text | Core claim or logic behind the idea |
-| `theory_object_type` | Dropdown | `ideological_system`, `concept`, `identity_frame`, `descriptor` |
-| `theory_entry_type` | Dropdown | Specific subtype: `ism`, `identity`, `descriptor`, etc. |
-| `category_origin` | Dropdown | `caste`, `capital`, `gender`, `religion`, etc. |
-| `ism_origin_type` | Dropdown | For `ideological_system`: where it emerged from |
-| `ism_function` | Dropdown | For isms: `Dominant`, `Counter`, `Transitional`, `Assimilated` |
-| `ideological_motion_status` | Dropdown | `Emerging`, `Active`, `Declining`, etc. |
-| `primary_domain` | Dropdown | `Political`, `Cultural`, `Economic`, `Legal`, etc. |
-| `tags` | Tag List | Classifiers like `hegemonic`, `intersectional` |
-| `keywords` | Tag List | Important associated concepts |
-| `contradiction_ids` | Linked Field | Contradictions this theory engages or explains |
-| `event_ids` | Linked Field | Events that validated or ruptured this idea |
-| `validation_status` | Dropdown | `Validated`, `Contested`, `Refuted` |
-| `political_spectrum` | Dropdown | `Ambedkarite`, `Marxist`, `Liberal`, etc. |
-| `author` | String | Original thinker or movement |
-| `publication_date` | Date | When the theory emerged |
-| `key_excerpts` | Long Text | Signature slogans, quotes |
-| `example_terms` | Tag List | Aliases or related terms (e.g., "Woke", "Bahujan") |
-
----
-
-## 🔹 **6.2 — Theory Instance Sheet**
-
-The Theory Instance Sheet captures **content objects** (e.g., tweets, essays, speeches, reels) that express theory in real-world time, created by political entities, pages, thinkers, or institutions.
-
-These are concrete expressions of theory and are linked back to Theory Objects.
-
-### **Schema:**
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `theory_instance_id` | String | Unique ID |
-| `title` | String | Short label or summary |
-| `origin_type` | Dropdown | `entity_produced`, `independent_theory`, `media_analysis`, etc. |
-| `origin_entity_id` | Linked Field | Entity that created or published it |
-| `author` | String | Name of speaker, writer, or group |
-| `publication_date` | Date | When it was released or posted |
-| `content_object_type` | Dropdown | `Tweet`, `IG Post`, `YouTube Video`, `Speech`, `Essay`, etc. |
-| `platform` | String | Instagram, Scroll, YouTube, Lok Sabha, etc. |
-| `src_type` | Dropdown | Broad content category: `Social Media`, `Editorial`, `Academic`, etc. |
-| `message_text` | Long Text | Caption, excerpt, or transcript |
-| `url` | URL | Link to the post, article, or video |
-| `linked_theory_object_ids` | Linked Field | What ideological object(s) this expresses |
-| `linked_contradiction_ids` | Linked Field | Contradictions it engages or reframes |
-| `linked_event_ids` | Linked Field | If the content sparked or responded to an event |
-| `linked_stance_ids` | Linked Field | Position taken on a known issue |
-| `tags` | Tag List | Keywords or framing terms |
-
----
-
-## 🔹 7. Structures Sheet
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `structure_id` | String | Unique identifier. |
-| `structure_name` | String | Name of the structure (e.g., Indian Bureaucracy). |
-| `structure_type` | Dropdown | State / Caste / Kinship / Market etc. |
-| `subtype` | String | Optional refinement. |
-| `description` | Long Text | Structural function and history. |
-| `historical_range` | Date Range | Period it was active. |
-| `embedded_contradictions` | Linked Field | Contradictions that emerge from this structure. |
-| `linked_struggles` | Linked Field | Struggles shaped by or against this structure. |
-| `linked_entities` | Linked Field | Entities upholding or opposing this structure. |
-| `structure_evolution` | Long Text | How it changed, resisted change, or got reformed. |
-| `confidence` | Dropdown | High / Medium / Low + source context. |
-
----
-
-## 🔹 8. Relationships Sheet
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `relationship_id` | String | Unique identifier. |
-| `entity_1` | Linked Field | First actor in the relationship. |
-| `entity_2` | Linked Field | Second actor. |
-| `relationship_type` | Dropdown | Alliance / Rivalry / Co-optation etc. |
-| `struggle_id` | Linked Field | Struggle that contains or defines this relation. |
-| `linked_events` | Linked Field | Events that express the relation. |
-| `contradiction_implication` | Long Text | What contradiction this relation reflects. |
-| `relationship_timeline` | Date Range | Period over which the relationship lasted. |
-| `historical_context` | Long Text | Background of this dynamic. |
-
----
-
-## 🔹 9**.1 Timelines Sheet**
-
-This sheet defines overarching historical timelines that link together multiple historical phases and grid rows.
-
-| **Field** | **Type** | **Description** |
-| --- | --- | --- |
-| `timeline_id` | String | Unique identifier for the timeline. |
-| `title` | String | Name of the timeline arc. |
-| `description` | Long Text | Overview of what this timeline represents, including its thematic or historical scope. |
-| `linked_phases` | Linked Field | List of `phase_id`s from the Timeline Registry Sheet that belong to this timeline. |
-| `linked_grid_rows` | Auto-Generated | Pulled from `linked_phase_id` entries in the Timeline Grid Sheet. |
-| `category` | Dropdown | Classification: e.g., historical_arc, thematic_sequence, etc. |
-| `is_public` | Boolean | Whether this timeline is visible to users in the frontend. |
-
-## 🔹 9.2 Timeline Registry Sheet (Macro Historical Arcs)
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `phase_id` | String | Unique identifier for this historical phase. |
-| `phase_label` | String | Descriptive title for the phase. |
-| `description` | Long Text | Defines the phase’s contradictions and context. |
-| `anchor_contradiction` | Linked Field | Central contradiction shaping this period. |
-| `linked_struggle` | Linked Field | Core struggle active during this timeline arc. |
-| `linked_events` | Linked Field | Key events from this phase. |
-| `linked_entities` | Linked Field | Key actors in play. |
-| `date_range` | Date Range | Start and end of this timeline arc. |
-| `current_phase` | Boolean | Whether this is the active timeline phase. |
-
----
-
-## 🔹 9.3 Timeline Grid Sheet (Zoom-Level Navigation)
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `timeline_grid_id` | String | Unique block identifier. |
-| `linked_phase_id` | Linked Field | Which registry phase this belongs to. |
-| `zoom_level` | Dropdown | View level: Event / Issue / Struggle / Contradiction. |
-| `linked_item_id` | Linked Field | The element at this zoom level. |
-| `label` | String | Display name on the timeline grid. |
-| `notes` | Long Text | Internal notes or custom display logic. |
-| `weight` | Integer | Optional weight or rendering priority. |
-| `color_tag` | Tag | Optional frontend tag for color mapping. |
+| Sheet Name | Linked Sheets | Key Linking Fields | Why These Links Exist |
+|------------|---------------|--------------------|------------------------|
+| Structures | Contradictions, Events, Struggles, Issues, Timeline Registry | root_structure, structure_ids, parent_structure | Structures generate contradictions, shape events and struggles, and persist across phases. |
+| Contradictions | Struggles, Events, Issues, Entities, Theory Objects, Timelines, Timeline Registry | linked_contradictions, contradiction_id, contradiction_ids, entity_ids, theory_ids, timeline_ids, timeline_registry_ids | Contradictions animate all motion and are interpreted, surfaced, and fought over. |
+| Struggles | Events, Issues, Entities, Timeline Registry | struggle_id, linked_issues, entity_ids, linked_struggles | Struggles express contradictions via events, are composed of issues, and involve actors. |
+| Events | Issues, Entities, Theory Instances, Timelines, Structures, Relationships | issue_event_id, entity_ids, linked_event_ids, linked_timeline_id, structure_ids | Events surface contradictions, trigger issues, involve entities, and are framed ideologically. |
+| Issues | Struggles, Entities, Theory Instances | linked_struggles, linked_issues, linked_stance_ids | Issues form the terrain of struggle and debate, and are shaped by ideology and actors. |
+| Entities | Events, Issues, Struggles, Relationships, Contradictions, Theory Instances | linked_events, linked_issues, struggle_ids, contradiction_ids, origin_entity_id | Entities enact and respond to contradiction, participate in events and theory. |
+| Theory Objects | Contradictions, Theory Instances, Events | theory_ids, linked_theory_object_ids, event_ids | Theory explains contradiction and is surfaced via events and discourse. |
+| Theory Instances | Theory Objects, Events, Issues, Narratives | linked_theory_object_ids, linked_event_ids, linked_stance_ids, narrative(s)_represented | Theory is expressed through content and connects to rupture and stance. |
+| Timelines | Events, Timeline Registry, Timeline Grid | linked_timeline_id, linked_phases, timeline_id | Timelines group events into arcs and organize phases of contradiction motion. |
+| Timeline Registry | Structures, Contradictions, Struggles, Events | structure_ids, anchor_contradiction, linked_struggles, linked_events | Registry bundles contradiction-driven arcs into historical phases. |
+| Timeline Grid | Events, Issues, Struggles, Timeline Registry | linked_item_id, linked_phase_id | Grid visualizes timeline motion at multiple zoom levels. |
+| Relationships | Entities, Events | entity_1 / entity_2, linked_events | Captures relational structure (alliance, opposition, etc.) between actors. |

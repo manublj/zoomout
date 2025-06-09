@@ -3,7 +3,8 @@ import { Container, Row, Spinner, Table, Modal } from 'react-bootstrap';
 import SearchBar from '../components/common/SearchBar';
 import FloatingButton from '../components/common/FloatingButton';
 import { getSheetData, SHEET_NAMES } from '../api/googleSheetsApi';
-import FormsPage from './FormsPage';
+import DynamicForm from '../components/pages/forms/DynamicForm';
+import { formConfigs } from '../utils/formUtils';
 
 const ReportingPage = () => {
   const [reports, setReports] = useState([]);
@@ -74,6 +75,19 @@ const ReportingPage = () => {
     );
   };
 
+  const handleFormSubmit = async (formData) => {
+    try {
+      setLoading(true);
+      // Handle form submission
+      console.log('Form submitted:', formData);
+      setShowForm(false);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Container fluid className="p-3">
       <SearchBar onSearch={handleSearch} />
@@ -95,7 +109,12 @@ const ReportingPage = () => {
           <Modal.Title>Add New Report</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <FormsPage />
+          <DynamicForm
+            sheetName="REPORTING"
+            config={formConfigs.REPORTING}
+            onSubmit={handleFormSubmit}
+            loading={loading}
+          />
         </Modal.Body>
       </Modal>
     </Container>

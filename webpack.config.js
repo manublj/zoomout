@@ -3,8 +3,9 @@ const path = require('path');
 
 module.exports = {
   resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
     alias: {
-      '@': path.resolve(__dirname, 'src'), // Add this line to configure the alias
+      '@': path.resolve(__dirname, 'src'),
     },
     fallback: {
       "https": require.resolve("https-browserify"),
@@ -33,5 +34,19 @@ module.exports = {
       const mod = resource.request.replace(/^node:/, '');
       resource.request = mod;
     })
-  ]
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx|ts|tsx)$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript'],
+          },
+        },
+      },
+    ],
+  },
 };
