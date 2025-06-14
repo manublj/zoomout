@@ -1,1 +1,0 @@
-window.process = require('process');

@@ -1,1 +1,0 @@
-// This component has been removed as reading mode functionality is no longer required.
